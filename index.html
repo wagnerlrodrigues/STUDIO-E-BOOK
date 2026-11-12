@@ -539,3 +539,1891 @@
                             <button onclick="downloadCsvTemplate('cronograma')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1">
                                 <i class="ph-bold ph-download-simple"></i> Modelo CSV
                             </button>
+                            <label class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
+                                <i class="ph-bold ph-upload-simple"></i> Importar CSV
+                                <input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'cronograma')">
+                            </label>
+                            <button onclick="addCronogramaRow()" class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1">
+                                <i class="ph-bold ph-plus"></i> + Linha
+                            </button>
+                        </div>
+                    </div>
+                    <div id="cronograma-editor-list" class="space-y-2.5"></div>
+                </div>
+
+                <!-- ABA 5: PLANOS DE AULA -->
+                <div id="tab-planos" class="tab-pane hidden space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800">Planos de Aula</h3>
+                            <p class="text-xs text-slate-500">Cadastre ou importe todos os planos via CSV.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button onclick="downloadCsvTemplate('planos')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1">
+                                <i class="ph-bold ph-download-simple"></i> Modelo CSV
+                            </button>
+                            <label class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
+                                <i class="ph-bold ph-upload-simple"></i> Importar CSV
+                                <input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'planos')">
+                            </label>
+                            <button onclick="addLessonPlan()" class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1">
+                                <i class="ph-bold ph-plus"></i> + Plano
+                            </button>
+                        </div>
+                    </div>
+                    <div id="planos-editor-list" class="space-y-3"></div>
+                </div>
+
+                <!-- ABA 6: RELATÓRIOS & FOTOS DE AULA -->
+                <div id="tab-relatorios" class="tab-pane hidden space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800">Relatórios Reflexivos & Fotos</h3>
+                            <p class="text-xs text-slate-500">Relatos docentes e registros fotográficos de cada encontro.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button onclick="downloadCsvTemplate('relatorios')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-lg text-xs font-semibold flex items-center gap-1">
+                                <i class="ph-bold ph-download-simple"></i> Modelo CSV
+                            </button>
+                            <label class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
+                                <i class="ph-bold ph-upload-simple"></i> Importar CSV
+                                <input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'relatorios')">
+                            </label>
+                            <button onclick="addClassReport()" class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1">
+                                <i class="ph-bold ph-plus"></i> + Relatório
+                            </button>
+                        </div>
+                    </div>
+                    <div id="relatorios-editor-list" class="space-y-3"></div>
+                </div>
+
+                <!-- ABA 7: TABELAS CSV (NOTAS, FREQUÊNCIA E ATIVIDADES DINÂMICAS) -->
+                <div id="tab-tabelas" class="tab-pane hidden space-y-5">
+                    <!-- Configuração da Quantidade Real de Aulas -->
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3 space-y-2.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <h4 class="text-xs font-extrabold uppercase text-indigo-900 flex items-center gap-1.5">
+                                    <i class="ph-fill ph-sliders-horizontal text-indigo-600"></i> Quantidade Real de Aulas do Curso
+                                </h4>
+                                <p class="text-[11px] text-indigo-700">Ajusta automaticamente as colunas de Frequência e Participação.</p>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                <input type="number" id="input-num-aulas" min="1" max="30" value="12" onchange="setNumAulas(this.value)" class="w-16 px-2 py-1 text-xs font-bold text-center border border-indigo-300 rounded-lg bg-white">
+                                <button onclick="syncAulasFromPlans()" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-[11px] font-semibold transition" title="Sincronizar datas e módulos com Planos/Relatórios">
+                                    Sincronizar Aulas
+                                </button>
+                            </div>
+                        </div>
+                        <div id="aulas-meta-grid" class="grid grid-cols-3 sm:grid-cols-4 gap-1.5 pt-1"></div>
+                    </div>
+
+                    <!-- Sub-abas de Tabelas -->
+                    <div class="flex gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button onclick="switchTableSubtab('notas')" id="subtab-btn-notas" class="flex-1 py-1.5 rounded-lg text-xs font-bold bg-white text-blue-600 shadow-sm">
+                            1. Notas (<span id="count-notas">0</span>)
+                        </button>
+                        <button onclick="switchTableSubtab('frequencia')" id="subtab-btn-frequencia" class="flex-1 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+                            2. Frequência
+                        </button>
+                        <button onclick="switchTableSubtab('atividades')" id="subtab-btn-atividades" class="flex-1 py-1.5 rounded-lg text-xs font-semibold text-slate-600">
+                            3. Atividades
+                        </button>
+                    </div>
+
+                    <!-- Sub-pane Notas -->
+                    <div id="subtab-notas" class="space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-700">Listagem de Notas de Certificação (Média ≥ 7,0)</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="downloadCsvTemplate('notas')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-semibold border border-slate-300">Modelo CSV</button>
+                                <label class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[11px] font-semibold cursor-pointer">
+                                    Importar CSV
+                                    <input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'notas')">
+                                </label>
+                                <button onclick="addStudentRow()" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-[11px] font-semibold">+ Aluno</button>
+                            </div>
+                        </div>
+                        <div id="notas-editor-list" class="space-y-1.5 max-h-80 overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <!-- Sub-pane Frequência -->
+                    <div id="subtab-frequencia" class="hidden space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-700">Controle de Presença (P = Presente | F = Falta)</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="downloadCsvTemplate('frequencia')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-semibold border border-slate-300">Modelo CSV</button>
+                                <label class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[11px] font-semibold cursor-pointer">
+                                    Importar CSV
+                                    <input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'frequencia')">
+                                </label>
+                            </div>
+                        </div>
+                        <div id="frequencia-editor-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+                    </div>
+
+                    <!-- Sub-pane Atividades -->
+                    <div id="subtab-atividades" class="hidden space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-xs font-bold text-slate-700">Participação em Atividades (S = Sim | N = Não)</span>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="downloadCsvTemplate('atividades')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded text-[11px] font-semibold border border-slate-300">Modelo CSV</button>
+                                <label class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[11px] font-semibold cursor-pointer">
+                                    Importar CSV
+                                    <input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'atividades')">
+                                </label>
+                            </div>
+                        </div>
+                        <div id="atividades-editor-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+                    </div>
+                </div>
+
+                <!-- ABA 8: ANEXOS & IMAGENS COMPLEMENTARES -->
+                <div id="tab-anexos" class="tab-pane hidden space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="text-sm font-bold text-slate-800">Anexos, Atividades Impressas & Cartazes</h3>
+                            <p class="text-xs text-slate-500">Adicione imagens de listas de frequência assinadas, dinâmicas ou cartazes.</p>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <label class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer shadow-sm">
+                                <i class="ph-bold ph-upload-simple"></i> Enviar Imagens
+                                <input type="file" accept="image/*" multiple class="hidden" onchange="handleAnexosUpload(event)">
+                            </label>
+                            <button onclick="addTextAnexo()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-sm">
+                                <i class="ph-bold ph-plus"></i> + Anexo Texto
+                            </button>
+                        </div>
+                    </div>
+                    <div id="anexos-editor-list" class="space-y-3"></div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- COLUNA DIREITA: PREVIEW PAGINADO EM TEMPO REAL -->
+        <main id="preview-wrapper" class="flex-1 bg-slate-200/90 flex flex-col h-1/2 lg:h-full overflow-hidden relative">
+            <!-- Barra Flutuante de Zoom e Contador de Páginas -->
+            <div class="no-print bg-white/90 backdrop-blur border-b border-slate-200 px-4 py-2 flex items-center justify-between text-xs shrink-0 z-10">
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                        <i class="ph-fill ph-eye text-blue-600"></i> Preview Paginado Real
+                    </span>
+                    <span id="page-counter-badge" class="px-2 py-0.5 bg-blue-100 text-blue-800 font-bold rounded-full text-[11px]">0 páginas</span>
+                    <span id="format-badge-info" class="px-2 py-0.5 bg-slate-100 text-slate-600 font-medium rounded-full text-[11px]">A5 (148 × 210 mm)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-slate-500 text-[11px]">Zoom:</span>
+                    <button onclick="adjustZoom(-0.1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold">-</button>
+                    <span id="zoom-label" class="font-mono font-bold text-[11px] w-11 text-center">100%</span>
+                    <button onclick="adjustZoom(0.1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold">+</button>
+                    <button onclick="adjustZoom(0)" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-[10px] font-semibold">Reset</button>
+                </div>
+            </div>
+
+            <!-- Área de Rolagem das Folhas -->
+            <div id="preview-scroll-container" class="flex-1 overflow-y-auto p-4 sm:p-8">
+                <div id="ebook-canvas" class="origin-top transition-transform duration-150"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL CENTRAL DE MODELOS E IMPORTAÇÃO CSV -->
+    <div id="csv-modal" class="no-print fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
+            <div class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <i class="ph-fill ph-file-csv text-2xl text-emerald-400"></i>
+                    <div>
+                        <h3 class="font-bold text-sm sm:text-base">Modelos de Planilhas CSV para Importação Rápida</h3>
+                        <p class="text-[11px] text-slate-400">Baixe os modelos compatíveis com Excel / Google Sheets, preencha e importe</p>
+                    </div>
+                </div>
+                <button onclick="closeCsvTemplatesModal()" class="text-slate-400 hover:text-white p-1">
+                    <i class="ph-bold ph-x text-lg"></i>
+                </button>
+            </div>
+
+            <div class="p-4 overflow-y-auto space-y-2.5 text-xs">
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-slate-800">1. Modelo de Cronograma (.CSV)</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">Colunas: <code class="bg-slate-200/80 px-1.5 py-0.5 rounded font-mono break-all">modulo;periodo;ministrantes;horario;titulo;cargaHoraria</code></div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="downloadCsvTemplate('cronograma')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center gap-1"><i class="ph-bold ph-download-simple"></i> Baixar</button>
+                        <label class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center gap-1 cursor-pointer"><i class="ph-bold ph-upload-simple"></i> Importar<input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'cronograma')"></label>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-slate-800">2. Modelo de Planos de Aula (.CSV)</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">Colunas: <code class="bg-slate-200/80 px-1.5 py-0.5 rounded font-mono break-all">aula;modulo;titulo;objetivos;conteudo;metodologia;avaliacao</code></div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="downloadCsvTemplate('planos')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center gap-1"><i class="ph-bold ph-download-simple"></i> Baixar</button>
+                        <label class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center gap-1 cursor-pointer"><i class="ph-bold ph-upload-simple"></i> Importar<input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'planos')"></label>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-slate-800">3. Modelo de Relatórios de Aula (.CSV)</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">Colunas: <code class="bg-slate-200/80 px-1.5 py-0.5 rounded font-mono break-all">aula;modulo;monitores;apoio;professor;supervisor;cargaHoraria;data;objetivo;alinhamento;planejamento;dificuldades;licoes;feedback;sugestoes</code></div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="downloadCsvTemplate('relatorios')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center gap-1"><i class="ph-bold ph-download-simple"></i> Baixar</button>
+                        <label class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center gap-1 cursor-pointer"><i class="ph-bold ph-upload-simple"></i> Importar<input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'relatorios')"></label>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-slate-800">4. Modelo de Notas e Certificação (.CSV)</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">Colunas: <code class="bg-slate-200/80 px-1.5 py-0.5 rounded font-mono break-all">nome;nascimento;nota1;nota2</code></div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="downloadCsvTemplate('notas')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center gap-1"><i class="ph-bold ph-download-simple"></i> Baixar</button>
+                        <label class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center gap-1 cursor-pointer"><i class="ph-bold ph-upload-simple"></i> Importar<input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'notas')"></label>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-slate-800">5. Modelo de Frequência Geral Dinâmica (.CSV)</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">Colunas: <code id="csv-modal-freq-cols" class="bg-slate-200/80 px-1.5 py-0.5 rounded font-mono break-all">nome;nascimento;a1...a12</code> (P ou F)</div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="downloadCsvTemplate('frequencia')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center gap-1"><i class="ph-bold ph-download-simple"></i> Baixar</button>
+                        <label class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center gap-1 cursor-pointer"><i class="ph-bold ph-upload-simple"></i> Importar<input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'frequencia')"></label>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="min-w-0 flex-1">
+                        <div class="font-bold text-slate-800">6. Modelo de Participação em Atividades (.CSV)</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5">Colunas: <code id="csv-modal-ativ-cols" class="bg-slate-200/80 px-1.5 py-0.5 rounded font-mono break-all">nome;nascimento;a1...a12</code> (S ou N)</div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button onclick="downloadCsvTemplate('atividades')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold flex items-center gap-1"><i class="ph-bold ph-download-simple"></i> Baixar</button>
+                        <label class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold flex items-center gap-1 cursor-pointer"><i class="ph-bold ph-upload-simple"></i> Importar<input type="file" accept=".csv" class="hidden" onchange="importCsvData(event, 'atividades')"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 px-5 py-3 border-t border-slate-200 flex justify-end shrink-0">
+                <button onclick="closeCsvTemplatesModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-bold">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST DE FEEDBACK -->
+    <div id="toast-notification" class="no-print fixed bottom-4 right-4 bg-slate-900 text-white px-4 py-2.5 rounded-xl shadow-xl border border-slate-700 text-xs font-semibold flex items-center gap-2 z-50 hidden">
+        <i class="ph-fill ph-check-circle text-emerald-400 text-base"></i>
+        <span id="toast-message">Ação concluída!</span>
+    </div>
+
+    <!-- SCRIPT PRINCIPAL -->
+    <script>
+        // SVGs Vetoriais Nativos (LABMÍDIA, Click@Seguro e IFPI)
+        const SVG_LABMIDIA = `data:image/svg+xml;utf8,` + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+            <defs>
+                <linearGradient id="gScreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#06b6d4"/>
+                    <stop offset="50%" stop-color="#3b82f6"/>
+                    <stop offset="100%" stop-color="#ec4899"/>
+                </linearGradient>
+                <linearGradient id="gFlask" x1="20%" y1="0%" x2="80%" y2="100%">
+                    <stop offset="0%" stop-color="#06b6d4"/>
+                    <stop offset="45%" stop-color="#3b82f6"/>
+                    <stop offset="75%" stop-color="#d946ef"/>
+                    <stop offset="100%" stop-color="#f59e0b"/>
+                </linearGradient>
+            </defs>
+            <rect x="36" y="78" width="168" height="106" rx="18" fill="url(#gScreen)"/>
+            <rect x="46" y="88" width="148" height="82" rx="12" fill="#312e81"/>
+            <path d="M98 184 L142 184 L152 200 L88 200 Z" fill="#3b82f6"/>
+            <rect x="76" y="200" width="88" height="9" rx="4.5" fill="#2563eb"/>
+            <rect x="112" y="42" width="10" height="10" rx="2" fill="#06b6d4"/>
+            <rect x="128" y="24" width="16" height="16" rx="3" fill="#3b82f6"/>
+            <rect x="108" y="58" width="9" height="9" rx="2" fill="#8b5cf6"/>
+            <rect x="128" y="48" width="18" height="18" rx="3" fill="#d946ef"/>
+            <rect x="152" y="36" width="20" height="20" rx="3" fill="#f59e0b"/>
+            <rect x="148" y="64" width="11" height="11" rx="2" fill="#fb7185"/>
+            <path d="M104 68 L136 68 M110 68 L110 96 L76 156 C68 170 78 188 96 188 L144 188 C162 188 172 170 164 156 L130 96 L130 68" fill="url(#gFlask)" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <polygon points="110,126 110,160 138,143" fill="#ffffff"/>
+            <polygon points="136,156 146,196 156,184 168,196 175,189 163,177 175,169" fill="#ffffff" stroke="#3b82f6" stroke-width="4" stroke-linejoin="round"/>
+        </svg>`);
+
+        const SVG_CLICKSEGURO = `data:image/svg+xml;utf8,` + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+            <defs>
+                <radialGradient id="bgGlobe" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#22d3ee"/>
+                    <stop offset="70%" stop-color="#0284c7"/>
+                    <stop offset="100%" stop-color="#1e1b4b"/>
+                </radialGradient>
+            </defs>
+            <circle cx="100" cy="100" r="92" fill="url(#bgGlobe)" stroke="#4f46e5" stroke-width="6"/>
+            <rect x="65" y="88" width="70" height="62" rx="10" fill="#0e7490" stroke="#e0f2fe" stroke-width="4"/>
+            <path d="M78 88 V66 A22 22 0 0 1 122 66 V88" fill="none" stroke="#e0f2fe" stroke-width="8"/>
+            <circle cx="100" cy="119" r="18" fill="#06b6d4" stroke="#cffafe" stroke-width="2"/>
+        </svg>`);
+
+        const SVG_IFPI = `data:image/svg+xml;utf8,` + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 90">
+            <circle cx="22" cy="16" r="10" fill="#dc2626"/>
+            <rect x="38" y="6" width="20" height="20" rx="3" fill="#16a34a"/>
+            <rect x="64" y="6" width="20" height="20" rx="3" fill="#16a34a"/>
+            <rect x="12" y="32" width="20" height="20" rx="3" fill="#16a34a"/>
+            <rect x="38" y="32" width="20" height="20" rx="3" fill="#16a34a"/>
+            <rect x="12" y="58" width="20" height="20" rx="3" fill="#16a34a"/>
+            <rect x="38" y="58" width="20" height="20" rx="3" fill="#16a34a"/>
+            <rect x="64" y="58" width="20" height="20" rx="3" fill="#16a34a"/>
+            <text x="98" y="32" font-family="Montserrat, sans-serif" font-weight="800" font-size="20" fill="#0f172a">INSTITUTO FEDERAL</text>
+            <text x="98" y="53" font-family="Plus Jakarta Sans, sans-serif" font-weight="600" font-size="16" fill="#334155">Piauí</text>
+            <text x="98" y="73" font-family="Plus Jakarta Sans, sans-serif" font-weight="500" font-size="14" fill="#475569">Campus Teresina Zona Sul</text>
+        </svg>`);
+
+        // Estado Global do Projeto
+        let currentZoom = 1;
+        let state = getLabMidiaDefaultState();
+
+        function getLabMidiaDefaultState() {
+            const defaultAulas = [
+                { num: 1, date: '08/04', mod: 'MÓDULO I' },
+                { num: 2, date: '15/04', mod: 'MÓDULO I' },
+                { num: 3, date: '22/04', mod: 'MÓDULO I' },
+                { num: 4, date: '29/04', mod: 'MÓDULO II' },
+                { num: 5, date: '07/05', mod: 'MÓDULO II' },
+                { num: 6, date: '13/05', mod: 'MÓDULO II' },
+                { num: 7, date: '20/05', mod: 'MÓDULO III' },
+                { num: 8, date: '27/05', mod: 'MÓDULO III' },
+                { num: 9, date: '03/06', mod: 'MÓDULO III' },
+                { num: 10, date: '10/06', mod: 'MÓDULO IV' },
+                { num: 11, date: '17/06', mod: 'MÓDULO IV' },
+                { num: 12, date: '24/06', mod: 'MÓDULO IV' }
+            ];
+
+            return {
+                format: 'A5',
+                design: {
+                    coverStyle: 'labmidia',
+                    headerStyle: 'capsule',
+                    fontStyle: 'jakarta',
+                    c1: '#06b6d4',
+                    c2: '#3b82f6',
+                    c3: '#d946ef',
+                    c4: '#f59e0b'
+                },
+                meta: {
+                    titlePrefix: 'LAB',
+                    titleGradient: 'MÍDIA',
+                    subtitleTop: 'PRODUÇÃO CRIATIVA PARA',
+                    subtitle: 'DESIGN E MARKETING DIGITAL',
+                    slogan: 'Criatividade, comunicação visual e protagonismo estudantil na cultura digital',
+                    inst: 'INSTITUTO FEDERAL Piauí',
+                    campus: 'Campus Teresina Zona Sul',
+                    course: 'Licenciatura em Computação',
+                    activity: 'Atividade de Extensão I - 2026.1',
+                    classGroup: 'Turma: 326',
+                    school: 'CEEP Paulo Ferraz',
+                    projectLogo: SVG_LABMIDIA,
+                    instLogo: SVG_IFPI
+                },
+                team: [
+                    { name: 'Maria Aparecida Rosa', role: 'Licencianda / Monitora', photo: '' },
+                    { name: 'Clebio de Oliveira', role: 'Licenciando / Monitor', photo: '' },
+                    { name: 'Fabio Sousa', role: 'Licenciando / Monitor', photo: '' },
+                    { name: 'Thailison Nunes', role: 'Licenciando / Monitor', photo: '' },
+                    { name: 'Vanderlea Nascimento', role: 'Licencianda / Apoio', photo: '' },
+                    { name: 'Wagner Gomes', role: 'Licenciando / Monitor', photo: '' }
+                ],
+                introPhotos: [],
+                sections: [
+                    {
+                        id: 'resumo',
+                        title: 'RESUMO',
+                        content: `O projeto de extensão LABMÍDIA: Produção Criativa para Design e Marketing Digital, desenvolvido pelo curso de Licenciatura em Computação do IFPI – Campus Teresina Zona Sul, busca promover competências criativas, técnicas e éticas na produção de conteúdos digitais junto aos estudantes do Ensino Médio do CEEP Paulo Ferraz, em Teresina – PI.\n\nTrata-se de um público jovem imerso nas redes sociais e plataformas visuais que demanda formação prática sobre identidade visual, composição gráfica, uso consciente de ferramentas digitais e estratégias de comunicação nas mídias sociais.\n\nPara alcançar tais objetivos, foram realizadas oficinas práticas de design gráfico, tipografia, psicologia das cores, criação de peças para redes sociais no Canva e planejamento de campanhas educativas digitais.`
+                    },
+                    {
+                        id: 'introducao',
+                        title: 'INTRODUÇÃO',
+                        content: `A comunicação visual e o marketing digital tornaram-se linguagens essenciais na sociedade contemporânea, impactando diretamente a educação, o empreendedorismo jovem e a cidadania digital. Ferramentas acessíveis de design permitem que estudantes expressem ideias, divulguem projetos escolares e desenvolvam portfólios criativos.\n\nDiante desse cenário, este projeto de extensão reconhece a importância de capacitar os estudantes da rede pública para que utilizem ferramentas de produção gráfica e mídias digitais de maneira criativa, crítica, autoral e ética.`
+                    },
+                    {
+                        id: 'identificacao',
+                        title: 'IDENTIFICAÇÃO DA AÇÃO',
+                        content: `Tipo de ação de Extensão: Ação de Ensino e Produção Criativa.\n\nO projeto foi realizado em parceria entre o Centro Estadual de Educação Profissional Paulo Ferraz (CEEP), situado em Teresina - PI, e o Instituto Federal do Piauí (IFPI) - Campus Teresina Zona Sul, conduzido pelos acadêmicos da Licenciatura em Computação, Turma 326.`
+                    },
+                    {
+                        id: 'justificativa',
+                        title: 'JUSTIFICATIVA',
+                        content: `A iniciativa visa fortalecer a cultura digital criativa e ampliar o acesso dos estudantes do ensino médio ao domínio de ferramentas de design gráfico, edição visual e comunicação estratégica. Além de preparar os jovens para demandas reais do mundo do trabalho e projetos escolares, a ação proporciona aos licenciandos em Computação a vivência prática da docência em tecnologia.`
+                    },
+                    {
+                        id: 'fundamentacao',
+                        title: 'FUNDAMENTAÇÃO TEÓRICA',
+                        content: `A cultura digital e os multiletramentos exigem que a escola contemporânea incorpore práticas de leitura e produção multimodal — combinando texto, imagem, cor, som e vídeo. Conforme a Base Nacional Comum Curricular (BNCC) e a Política Nacional de Educação Digital (Lei nº 14.533/2023), o desenvolvimento de habilidades criativas e éticas em ambientes digitais fortalece o protagonismo estudantil.`
+                    },
+                    {
+                        id: 'objetivos',
+                        title: 'OBJETIVOS DO PROJETO',
+                        content: `OBJETIVO GERAL:\nCapacitar os estudantes no uso de princípios de Design Gráfico e estratégias de Marketing Digital para a produção criativa e ética de conteúdos visuais.\n\nOBJETIVOS ESPECÍFICOS:\n1. Compreender os fundamentos do design visual (cores, tipografia, hierarquia e contraste);\n2. Utilizar plataformas digitais de criação gráfica para produzir peças educativas e comunicativas;\n3. Planejar campanhas digitais conscientes, respeitando direitos autorais e a privacidade na rede.`
+                    },
+                    {
+                        id: 'metodologia',
+                        title: 'METODOLOGIA DA AÇÃO',
+                        content: `A metodologia foi organizada em 4 módulos práticos totalizando 24 horas:\n\nMÓDULO 01 (6h): Fundamentos Visuais, Cores e Tipografia para Mídias Digitais.\nMÓDULO 02 (6h): Ferramentas de Criação Gráfica e Composição de Layouts.\nMÓDULO 03 (6h): Marketing Digital, Engajamento Ético e Direitos Autorais.\nMÓDULO 04 (6h): Projeto Prático Final – Criação de Campanha Visual Completa.`
+                    },
+                    {
+                        id: 'resultados',
+                        title: 'TREINAMENTO E RESULTADOS ESPERADOS',
+                        content: `Aplicação prática em laboratório de informática e dispositivos móveis, resultando na criação de identidades visuais, cartazes digitais e campanhas educativas produzidas pelos próprios alunos, com certificação aos aprovados.`
+                    },
+                    {
+                        id: 'indicadores',
+                        title: 'INDICADORES E AVALIAÇÃO',
+                        content: `A avaliação contemplou diagnóstico inicial, acompanhamento formativo das criações gráficas em cada oficina, apresentação final das campanhas, registro de frequência (mínimo de 75%) e notas de participação.`
+                    },
+                    {
+                        id: 'disseminacao',
+                        title: 'DISSEMINAÇÃO',
+                        content: `Exposição das peças criadas nos canais digitais e murais da escola parceira, além da publicação deste E-book técnico-pedagógico no repositório institucional do IFPI.`
+                    }
+                ],
+                cronograma: [
+                    { modulo: 'MÓDULO 1', periodo: '08/04/2026 à 22/04/2026', ministrantes: 'Maria Aparecida e Vanderlea', horario: '13:20', titulo: 'Fundamentos do Design Visual, Cores e Tipografia', cargaHoraria: '6h' },
+                    { modulo: 'MÓDULO 2', periodo: '29/04/2026 à 13/05/2026', ministrantes: 'Clebio, Maria Aparecida, Thailison e Vanderlea', horario: '13:20', titulo: 'Produção Criativa e Ferramentas de Design Digital', cargaHoraria: '6h' },
+                    { modulo: 'MÓDULO 3', periodo: '20/05/2026 à 03/06/2026', ministrantes: 'Thailison, Maria Aparecida, Vanderlea e Fabio', horario: '13:20', titulo: 'Marketing Digital, Redes Sociais e Ética Visual', cargaHoraria: '6h' },
+                    { modulo: 'MÓDULO 4', periodo: '10/06/2026 à 24/06/2026', ministrantes: 'Fabio, Maria Aparecida, Clebio, Vanderlea e Wagner', horario: '13:20', titulo: 'Campanha Criativa Final e Portfólio Digital', cargaHoraria: '6h' }
+                ],
+                planos: [
+                    {
+                        aula: '01',
+                        modulo: 'MÓDULO I',
+                        titulo: 'Introdução ao Design Visual e Percepção Gráfica',
+                        objetivos: 'Compreender o papel do design na comunicação cotidiana;\nIdentificar elementos visuais básicos (ponto, linha, forma, cor e tipografia).',
+                        conteudo: 'O que é Design Gráfico;\nComunicação visual nas mídias digitais;\nExemplos práticos de boas e más composições.',
+                        metodologia: 'Acolhida da turma e apresentação do projeto LABMÍDIA;\nExposição dialogada com análise visual de peças reais;\nAtividade prática de criação rápida.',
+                        avaliacao: 'Participação nas análises visuais e entrega do exercício inicial.'
+                    },
+                    {
+                        aula: '02',
+                        modulo: 'MÓDULO I',
+                        titulo: 'Psicologia das Cores e Tipografia Criativa',
+                        objetivos: 'Aplicar harmonias cromáticas na criação de peças digitais;\nCombinar fontes tipográficas com legibilidade e hierarquia.',
+                        conteudo: 'Círculo cromático e contrastes;\nClassificação de fontes (serifadas, sem serifa e display);\nHierarquia visual da informação.',
+                        metodologia: 'Aula prática no laboratório explorando paletas de cores e combinações tipográficas para posts educativos.',
+                        avaliacao: 'Criação de um card aplicando paleta harmônica e hierarquia de títulos.'
+                    }
+                ],
+                relatorios: [
+                    {
+                        aula: '01',
+                        modulo: 'MÓDULO I',
+                        monitores: 'Maria Aparecida Vieira Rosa',
+                        apoio: 'Vanderlea Cardoso do Nascimento',
+                        professor: 'Leonia Eulálio Dantas Luz Costa',
+                        supervisor: 'Eltoni Alves Guimarães',
+                        cargaHoraria: '2 horas',
+                        data: '08/04/2026',
+                        objetivo: 'Apresentar os fundamentos do Design Visual e estimular o olhar crítico sobre peças gráficas nas redes sociais.',
+                        alinhamento: 'Sim, os objetivos integraram teoria de design e prática visual aplicada à realidade dos estudantes.',
+                        planejamento: 'Acolhida inicial, dinâmica quebra-gelo, apresentação de slides visuais e atividade prática de análise de posts.',
+                        dificuldades: 'Ajuste inicial do tempo e organização do acesso aos computadores do laboratório.',
+                        licoes: 'Gestão de tempo, comunicação visual clara e mediação pedagógica ativa.',
+                        feedback: 'Os alunos demonstraram grande entusiasmo ao analisar designs de redes sociais que utilizam diariamente.',
+                        sugestoes: 'Priorizar atividades mão na massa desde os primeiros minutos da oficina.',
+                        photos: []
+                    }
+                ],
+                referencias: `BRASIL. Lei nº 14.533, de 11 de janeiro de 2023. Institui a Política Nacional de Educação Digital. Diário Oficial da União, Brasília, DF, 2023.\n\nLUPTON, Ellen. Pensar com Tipos: Guia para designers, escritores, editores e estudantes. São Paulo: Cosac Naify, 2013.\n\nWILLIAMS, Robin. Design para quem não é designer: Princípios de design e tipografia para iniciantes. São Paulo: Callis, 2013.\n\nKOTLER, Philip; KARTAJAYA, Hermawan; SETIAWAN, Iwan. Marketing 5.0: Tecnologia para a humanidade. Rio de Janeiro: Sextante, 2021.`,
+                conclusao: `O Projeto de Extensão consolidou um espaço criativo de aprendizagem prática entre o IFPI – Campus Teresina Zona Sul e a comunidade escolar do CEEP Paulo Ferraz.\n\nAo longo dos módulos, os estudantes desenvolveram autonomia estética, domínio de ferramentas gráficas e consciência ética sobre comunicação digital, enquanto os licenciandos aperfeiçoaram suas competências pedagógicas e de gestão de sala de aula.`,
+                aulasMeta: defaultAulas,
+                students: [
+                    { name: 'ANGELO MAURICIO DA SILVA AGUIAR', dob: '24/05/2010', n1: 9.2, n2: 10.0, freq: ['P','P','P','P','P','P','P','P','F','P','P','P'], ativ: ['S','S','S','S','S','S','S','S','S','S','S','S'] },
+                    { name: 'DÁFNE MARIA PEREIRA DA PAZ', dob: '18/11/2010', n1: 8.3, n2: 10.0, freq: ['P','P','P','F','P','F','P','P','P','P','P','P'], ativ: ['S','S','S','S','S','S','S','S','S','S','S','S'] },
+                    { name: 'EDSON GONCALVES DA SILVA CRUZ', dob: '14/02/2009', n1: 9.2, n2: 8.3, freq: ['P','P','P','P','P','P','P','P','P','F','P','P'], ativ: ['S','S','S','S','S','S','S','S','N','N','S','S'] },
+                    { name: 'MARCOS VINICIUS MACEDO CARVALHO', dob: '24/03/2011', n1: 9.2, n2: 8.3, freq: ['P','P','P','P','P','P','P','P','F','P','P','P'], ativ: ['S','S','S','S','S','S','S','S','N','S','N','S'] },
+                    { name: 'MARIA LUIZA DE SOUSA OLIVEIRA', dob: '09/11/2009', n1: 7.5, n2: 9.2, freq: ['P','P','P','F','P','P','P','P','F','F','P','P'], ativ: ['S','S','S','S','S','S','S','S','N','S','S','S'] },
+                    { name: 'KAUE PINHEIRO DA SILVA AZEVEDO', dob: '11/07/2010', n1: 7.5, n2: 5.8, freq: ['P','P','P','P','F','P','P','P','F','P','F','P'], ativ: ['S','S','S','N','N','N','S','S','N','S','N','S'] }
+                ],
+                anexos: [
+                    { title: 'Dinâmica de Abertura e Briefing Criativo', content: 'Roteiro de criação rápida em equipes: elaboração de identidade visual e slogan para uma campanha escolar educativa utilizando os princípios de contraste, alinhamento, repetição e proximidade.', image: '' }
+                ]
+            };
+        }
+
+        // Navegação das Abas Principais
+        function switchTab(tabId) {
+            document.querySelectorAll('#editor-tabs .tab-btn').forEach(btn => {
+                const isActive = btn.getAttribute('data-tab') === tabId;
+                btn.className = isActive
+                    ? 'tab-btn active px-3 py-2 rounded-t-lg text-xs font-bold flex items-center gap-1.5 border-b-2 border-blue-600 text-blue-600 bg-white whitespace-nowrap'
+                    : 'tab-btn px-3 py-2 rounded-t-lg text-xs font-semibold flex items-center gap-1.5 border-b-2 border-transparent text-slate-600 hover:text-slate-900 whitespace-nowrap';
+            });
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.add('hidden'));
+            const target = document.getElementById('tab-' + tabId);
+            if (target) target.classList.remove('hidden');
+        }
+
+        // Sub-abas de Tabelas
+        function switchTableSubtab(subId) {
+            ['notas', 'frequencia', 'atividades'].forEach(id => {
+                const pane = document.getElementById('subtab-' + id);
+                const btn = document.getElementById('subtab-btn-' + id);
+                if (pane) pane.classList.toggle('hidden', id !== subId);
+                if (btn) {
+                    btn.className = (id === subId)
+                        ? 'flex-1 py-1.5 rounded-lg text-xs font-bold bg-white text-blue-600 shadow-sm'
+                        : 'flex-1 py-1.5 rounded-lg text-xs font-semibold text-slate-600';
+                }
+            });
+        }
+
+        // Alternar Formato A5 / A4
+        function setPageFormat(fmt) {
+            state.format = fmt;
+            const btnA5 = document.getElementById('btn-format-A5');
+            const btnA4 = document.getElementById('btn-format-A4');
+            if (fmt === 'A5') {
+                btnA5.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow';
+                btnA4.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white';
+                document.getElementById('format-badge-info').textContent = 'A5 (148 × 210 mm)';
+            } else {
+                btnA4.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow';
+                btnA5.className = 'px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-slate-400 hover:text-white';
+                document.getElementById('format-badge-info').textContent = 'A4 (210 × 297 mm)';
+            }
+            document.getElementById('btn-export-label').textContent = `Exportar PDF (${fmt})`;
+            document.getElementById('dynamic-print-size').innerHTML = `@media print { @page { size: ${fmt} portrait; margin: 0; } }`;
+            renderEbookPreview();
+        }
+
+        // Presets Visuais de 1 Clique
+        function applyVisualPreset(preset) {
+            if (preset === 'labmidia') {
+                state.design = { coverStyle: 'labmidia', headerStyle: 'capsule', fontStyle: 'jakarta', c1: '#06b6d4', c2: '#3b82f6', c3: '#d946ef', c4: '#f59e0b' };
+                state.meta.projectLogo = SVG_LABMIDIA;
+            } else if (preset === 'clickseguro') {
+                state.design = { coverStyle: 'classic', headerStyle: 'diamond', fontStyle: 'jakarta', c1: '#2563eb', c2: '#4f46e5', c3: '#06b6d4', c4: '#3b82f6' };
+                state.meta.projectLogo = SVG_CLICKSEGURO;
+            } else if (preset === 'ifpiverde') {
+                state.design = { coverStyle: 'editorial', headerStyle: 'banner', fontStyle: 'poppins', c1: '#16a34a', c2: '#0f766e', c3: '#15803d', c4: '#dc2626' };
+            } else if (preset === 'editorial') {
+                state.design = { coverStyle: 'bold', headerStyle: 'editorial', fontStyle: 'serif', c1: '#0f172a', c2: '#e11d48', c3: '#7c3aed', c4: '#f59e0b' };
+            }
+            syncDesignInputs();
+            applyCssVariables();
+            renderEbookPreview();
+            showToast('Estética visual atualizada!');
+        }
+
+        function syncDesignInputs() {
+            document.getElementById('style-cover').value = state.design.coverStyle;
+            document.getElementById('style-header').value = state.design.headerStyle;
+            document.getElementById('style-font').value = state.design.fontStyle;
+            document.getElementById('color-c1').value = state.design.c1;
+            document.getElementById('color-c2').value = state.design.c2;
+            document.getElementById('color-c3').value = state.design.c3;
+            document.getElementById('color-c4').value = state.design.c4;
+
+            document.getElementById('meta-title-prefix').value = state.meta.titlePrefix;
+            document.getElementById('meta-title-gradient').value = state.meta.titleGradient;
+            document.getElementById('meta-subtitle-top').value = state.meta.subtitleTop;
+            document.getElementById('meta-subtitle').value = state.meta.subtitle;
+            document.getElementById('meta-slogan').value = state.meta.slogan;
+            document.getElementById('meta-inst').value = state.meta.inst;
+            document.getElementById('meta-campus').value = state.meta.campus;
+            document.getElementById('meta-course').value = state.meta.course;
+            document.getElementById('meta-activity').value = state.meta.activity;
+            document.getElementById('meta-class').value = state.meta.classGroup;
+            document.getElementById('meta-school').value = state.meta.school;
+
+            document.getElementById('editor-project-logo-preview').src = state.meta.projectLogo;
+            document.getElementById('editor-inst-logo-preview').src = state.meta.instLogo;
+        }
+
+        function updateDesignSettings() {
+            state.design.coverStyle = document.getElementById('style-cover').value;
+            state.design.headerStyle = document.getElementById('style-header').value;
+            state.design.fontStyle = document.getElementById('style-font').value;
+            state.design.c1 = document.getElementById('color-c1').value;
+            state.design.c2 = document.getElementById('color-c2').value;
+            state.design.c3 = document.getElementById('color-c3').value;
+            state.design.c4 = document.getElementById('color-c4').value;
+            applyCssVariables();
+            renderEbookPreview();
+        }
+
+        function applyCssVariables() {
+            const root = document.documentElement;
+            root.style.setProperty('--c1', state.design.c1);
+            root.style.setProperty('--c2', state.design.c2);
+            root.style.setProperty('--c3', state.design.c3);
+            root.style.setProperty('--c4', state.design.c4);
+
+            if (state.design.fontStyle === 'poppins') {
+                root.style.setProperty('--ebook-font-title', "'Poppins', sans-serif");
+                root.style.setProperty('--ebook-font-body', "'Inter', sans-serif");
+            } else if (state.design.fontStyle === 'serif') {
+                root.style.setProperty('--ebook-font-title', "'Montserrat', sans-serif");
+                root.style.setProperty('--ebook-font-body', "'Merriweather', serif");
+            } else {
+                root.style.setProperty('--ebook-font-title', "'Montserrat', sans-serif");
+                root.style.setProperty('--ebook-font-body', "'Plus Jakarta Sans', sans-serif");
+            }
+        }
+
+        function updateMeta() {
+            state.meta.titlePrefix = document.getElementById('meta-title-prefix').value;
+            state.meta.titleGradient = document.getElementById('meta-title-gradient').value;
+            state.meta.subtitleTop = document.getElementById('meta-subtitle-top').value;
+            state.meta.subtitle = document.getElementById('meta-subtitle').value;
+            state.meta.slogan = document.getElementById('meta-slogan').value;
+            state.meta.inst = document.getElementById('meta-inst').value;
+            state.meta.campus = document.getElementById('meta-campus').value;
+            state.meta.course = document.getElementById('meta-course').value;
+            state.meta.activity = document.getElementById('meta-activity').value;
+            state.meta.classGroup = document.getElementById('meta-class').value;
+            state.meta.school = document.getElementById('meta-school').value;
+            renderEbookPreview();
+        }
+
+        // Upload de Logos
+        function handleLogoUpload(event, key) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                state.meta[key] = e.target.result;
+                syncDesignInputs();
+                renderEbookPreview();
+                showToast('Logotipo atualizado!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function resetLogo(key) {
+            state.meta[key] = key === 'projectLogo' ? SVG_LABMIDIA : SVG_IFPI;
+            syncDesignInputs();
+            renderEbookPreview();
+        }
+
+        // Equipe e Fotos de Apresentação
+        function renderTeamEditor() {
+            const container = document.getElementById('team-members-list');
+            container.innerHTML = state.team.map((m, idx) => `
+                <div class="flex items-center gap-2 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                    <label class="w-10 h-10 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center overflow-hidden cursor-pointer shrink-0" title="Clique para enviar foto">
+                        ${m.photo ? `<img src="${m.photo}" class="w-full h-full object-cover">` : `<i class="ph-bold ph-camera text-slate-500"></i>`}
+                        <input type="file" accept="image/*" class="hidden" onchange="uploadTeamPhoto(event, ${idx})">
+                    </label>
+                    <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                        <input type="text" value="${escapeHtml(m.name)}" oninput="state.team[${idx}].name=this.value;renderEbookPreview()" class="px-2.5 py-1 text-xs font-bold border border-slate-300 rounded-lg bg-white" placeholder="Nome">
+                        <input type="text" value="${escapeHtml(m.role)}" oninput="state.team[${idx}].role=this.value;renderEbookPreview()" class="px-2.5 py-1 text-xs border border-slate-300 rounded-lg bg-white" placeholder="Função">
+                    </div>
+                    <button onclick="state.team.splice(${idx},1);renderTeamEditor();renderEbookPreview()" class="text-rose-500 hover:text-rose-700 p-1"><i class="ph-bold ph-trash"></i></button>
+                </div>
+            `).join('');
+
+            const photosGrid = document.getElementById('intro-photos-list');
+            photosGrid.innerHTML = state.introPhotos.map((src, idx) => `
+                <div class="relative group rounded-lg overflow-hidden border border-slate-200 aspect-video bg-slate-100">
+                    <img src="${src}" class="w-full h-full object-cover">
+                    <button onclick="state.introPhotos.splice(${idx},1);renderTeamEditor();renderEbookPreview()" class="absolute top-1 right-1 bg-rose-600 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center opacity-90"><i class="ph-bold ph-x"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function addTeamMember() {
+            state.team.push({ name: 'Novo Integrante', role: 'Licenciando(a)', photo: '' });
+            renderTeamEditor();
+            renderEbookPreview();
+        }
+
+        function uploadTeamPhoto(event, idx) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                state.team[idx].photo = e.target.result;
+                renderTeamEditor();
+                renderEbookPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleIntroPhotosUpload(event) {
+            const files = Array.from(event.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    state.introPhotos.push(e.target.result);
+                    renderTeamEditor();
+                    renderEbookPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Editor de Textos Teóricos, Referências e Conclusão
+        function renderSectionsEditor() {
+            const container = document.getElementById('sections-editor-container');
+            const secHtml = state.sections.map((sec, idx) => `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <input type="text" value="${escapeHtml(sec.title)}" oninput="state.sections[${idx}].title=this.value;renderEbookPreview()" class="font-bold text-xs text-slate-800 bg-white border border-slate-300 rounded-lg px-2.5 py-1 flex-1">
+                        <button onclick="state.sections.splice(${idx},1);renderSectionsEditor();renderEbookPreview()" class="text-rose-500 hover:text-rose-700 text-xs px-1.5" title="Remover seção"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                    <textarea rows="4" oninput="state.sections[${idx}].content=this.value;renderEbookPreview()" class="w-full p-2.5 text-xs border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 outline-none">${escapeHtml(sec.content)}</textarea>
+                </div>
+            `).join('');
+
+            container.innerHTML = secHtml + `
+                <button onclick="addCustomSection()" class="w-full py-2 border-2 border-dashed border-blue-300 hover:border-blue-500 text-blue-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                    <i class="ph-bold ph-plus-circle"></i> Adicionar Nova Seção Textual
+                </button>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 mt-4">
+                    <label class="block font-bold text-xs text-slate-800">REFERÊNCIAS BIBLIOGRÁFICAS</label>
+                    <textarea rows="4" oninput="state.referencias=this.value;renderEbookPreview()" class="w-full p-2.5 text-xs border border-slate-300 rounded-lg bg-white">${escapeHtml(state.referencias)}</textarea>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+                    <label class="block font-bold text-xs text-slate-800">RELATÓRIO DE CONCLUSÃO</label>
+                    <textarea rows="4" oninput="state.conclusao=this.value;renderEbookPreview()" class="w-full p-2.5 text-xs border border-slate-300 rounded-lg bg-white">${escapeHtml(state.conclusao)}</textarea>
+                </div>
+            `;
+        }
+
+        function addCustomSection() {
+            state.sections.push({ id: 'sec_' + Date.now(), title: 'NOVA SEÇÃO DO PROJETO', content: 'Digite o conteúdo desta seção...' });
+            renderSectionsEditor();
+            renderEbookPreview();
+        }
+
+        // Editor de Cronograma
+        function renderCronogramaEditor() {
+            const container = document.getElementById('cronograma-editor-list');
+            container.innerHTML = state.cronograma.map((row, idx) => `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-extrabold text-blue-700">${escapeHtml(row.modulo || 'MÓDULO')}</span>
+                        <button onclick="state.cronograma.splice(${idx},1);renderCronogramaEditor();renderEbookPreview()" class="text-rose-500 hover:text-rose-700 text-xs"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <input type="text" value="${escapeHtml(row.modulo)}" oninput="state.cronograma[${idx}].modulo=this.value;renderEbookPreview()" class="px-2 py-1 text-xs border rounded bg-white" placeholder="Módulo">
+                        <input type="text" value="${escapeHtml(row.periodo)}" oninput="state.cronograma[${idx}].periodo=this.value;renderEbookPreview()" class="px-2 py-1 text-xs border rounded bg-white" placeholder="Período/Datas">
+                        <input type="text" value="${escapeHtml(row.horario)}" oninput="state.cronograma[${idx}].horario=this.value;renderEbookPreview()" class="px-2 py-1 text-xs border rounded bg-white" placeholder="Horário">
+                        <input type="text" value="${escapeHtml(row.ministrantes)}" oninput="state.cronograma[${idx}].ministrantes=this.value;renderEbookPreview()" class="col-span-2 px-2 py-1 text-xs border rounded bg-white" placeholder="Ministrantes">
+                        <input type="text" value="${escapeHtml(row.cargaHoraria)}" oninput="state.cronograma[${idx}].cargaHoraria=this.value;renderEbookPreview()" class="px-2 py-1 text-xs border rounded bg-white" placeholder="Carga Horária">
+                        <input type="text" value="${escapeHtml(row.titulo)}" oninput="state.cronograma[${idx}].titulo=this.value;renderEbookPreview()" class="col-span-2 sm:col-span-3 px-2 py-1 text-xs font-semibold border rounded bg-white" placeholder="Unidade / Título do Módulo">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addCronogramaRow() {
+            state.cronograma.push({ modulo: `MÓDULO ${state.cronograma.length + 1}`, periodo: 'A definir', ministrantes: 'Equipe', horario: '13:20', titulo: 'Novo Tópico', cargaHoraria: '6h' });
+            renderCronogramaEditor();
+            renderEbookPreview();
+        }
+
+        // Editor de Planos de Aula
+        function renderPlanosEditor() {
+            const container = document.getElementById('planos-editor-list');
+            container.innerHTML = state.planos.map((p, idx) => `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2 flex-1">
+                            <input type="text" value="${escapeHtml(p.aula)}" oninput="state.planos[${idx}].aula=this.value;renderEbookPreview()" class="w-14 px-2 py-1 text-xs font-bold border rounded bg-white" placeholder="Nº">
+                            <input type="text" value="${escapeHtml(p.modulo)}" oninput="state.planos[${idx}].modulo=this.value;renderEbookPreview()" class="w-28 px-2 py-1 text-xs font-semibold border rounded bg-white" placeholder="MÓDULO I">
+                            <input type="text" value="${escapeHtml(p.titulo)}" oninput="state.planos[${idx}].titulo=this.value;renderEbookPreview()" class="flex-1 px-2 py-1 text-xs font-bold border rounded bg-white" placeholder="Título da Aula">
+                        </div>
+                        <button onclick="state.planos.splice(${idx},1);renderPlanosEditor();renderEbookPreview()" class="text-rose-500 hover:text-rose-700"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase">Objetivos</label>
+                            <textarea rows="2" oninput="state.planos[${idx}].objetivos=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(p.objetivos)}</textarea>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase">Conteúdo Programático</label>
+                            <textarea rows="2" oninput="state.planos[${idx}].conteudo=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(p.conteudo)}</textarea>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase">Procedimentos Metodológicos</label>
+                            <textarea rows="2" oninput="state.planos[${idx}].metodologia=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(p.metodologia)}</textarea>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600 uppercase">Avaliação</label>
+                            <textarea rows="2" oninput="state.planos[${idx}].avaliacao=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(p.avaliacao)}</textarea>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addLessonPlan() {
+            const nextNum = String(state.planos.length + 1).padStart(2, '0');
+            state.planos.push({
+                aula: nextNum,
+                modulo: 'MÓDULO I',
+                titulo: 'Unidade Temática da Aula ' + nextNum,
+                objetivos: 'Compreender os conceitos abordados na oficina.',
+                conteudo: 'Tópico 1;\nTópico 2.',
+                metodologia: 'Exposição dialogada e prática mão na massa.',
+                avaliacao: 'Avaliação formativa e participação.'
+            });
+            renderPlanosEditor();
+            renderEbookPreview();
+        }
+
+        // Editor de Relatórios e Fotos de Aula
+        function renderRelatoriosEditor() {
+            const container = document.getElementById('relatorios-editor-list');
+            container.innerHTML = state.relatorios.map((r, idx) => `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2.5">
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5 flex-1">
+                            <span class="text-xs font-extrabold text-indigo-700">AULA</span>
+                            <input type="text" value="${escapeHtml(r.aula)}" oninput="state.relatorios[${idx}].aula=this.value;renderEbookPreview()" class="w-12 px-2 py-1 text-xs font-bold border rounded bg-white">
+                            <input type="text" value="${escapeHtml(r.modulo)}" oninput="state.relatorios[${idx}].modulo=this.value;renderEbookPreview()" class="w-28 px-2 py-1 text-xs border rounded bg-white" placeholder="Módulo">
+                            <input type="text" value="${escapeHtml(r.data)}" oninput="state.relatorios[${idx}].data=this.value;renderEbookPreview()" class="w-24 px-2 py-1 text-xs border rounded bg-white" placeholder="Data">
+                        </div>
+                        <button onclick="state.relatorios.splice(${idx},1);renderRelatoriosEditor();renderEbookPreview()" class="text-rose-500 hover:text-rose-700"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <input type="text" value="${escapeHtml(r.monitores)}" oninput="state.relatorios[${idx}].monitores=this.value;renderEbookPreview()" class="px-2 py-1 text-xs border rounded bg-white" placeholder="Monitores">
+                        <input type="text" value="${escapeHtml(r.apoio)}" oninput="state.relatorios[${idx}].apoio=this.value;renderEbookPreview()" class="px-2 py-1 text-xs border rounded bg-white" placeholder="Apoio">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600">OBJETIVO GERAL DA AULA</label>
+                            <textarea rows="2" oninput="state.relatorios[${idx}].objetivo=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(r.objetivo)}</textarea>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600">PLANEJAMENTO & EXECUÇÃO</label>
+                            <textarea rows="2" oninput="state.relatorios[${idx}].planejamento=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(r.planejamento)}</textarea>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600">DIFICULDADES & LIÇÕES</label>
+                            <textarea rows="2" oninput="state.relatorios[${idx}].dificuldades=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(r.dificuldades)}</textarea>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-slate-600">FEEDBACK & SUGESTÕES</label>
+                            <textarea rows="2" oninput="state.relatorios[${idx}].feedback=this.value;renderEbookPreview()" class="w-full p-1.5 text-xs border rounded bg-white">${escapeHtml(r.feedback)}</textarea>
+                        </div>
+                    </div>
+                    <!-- Upload de Fotos desta Aula -->
+                    <div class="pt-2 border-t border-slate-200">
+                        <div class="flex items-center justify-between mb-1.5">
+                            <span class="text-[11px] font-bold text-slate-700">Fotos da Aula ${escapeHtml(r.aula)} (${(r.photos||[]).length})</span>
+                            <label class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[11px] font-semibold cursor-pointer">
+                                + Adicionar Fotos
+                                <input type="file" accept="image/*" multiple class="hidden" onchange="uploadReportPhotos(event, ${idx})">
+                            </label>
+                        </div>
+                        <div class="grid grid-cols-4 gap-1.5">
+                            ${(r.photos || []).map((ph, pIdx) => `
+                                <div class="relative aspect-video rounded overflow-hidden border bg-white">
+                                    <img src="${ph}" class="w-full h-full object-cover">
+                                    <button onclick="state.relatorios[${idx}].photos.splice(${pIdx},1);renderRelatoriosEditor();renderEbookPreview()" class="absolute top-0.5 right-0.5 bg-rose-600 text-white w-4 h-4 rounded-full text-[9px] flex items-center justify-center">×</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addClassReport() {
+            const nextNum = String(state.relatorios.length + 1).padStart(2, '0');
+            state.relatorios.push({
+                aula: nextNum,
+                modulo: 'MÓDULO I',
+                monitores: 'Equipe Executora',
+                apoio: 'Apoio Pedagógico',
+                professor: 'Leonia Eulálio Dantas Luz Costa',
+                supervisor: 'Eltoni Alves Guimarães',
+                cargaHoraria: '2 horas',
+                data: '15/04/2026',
+                objetivo: 'Desenvolver atividades práticas referentes ao encontro.',
+                alinhamento: 'Objetivos plenamente alinhados à prática extensionista.',
+                planejamento: 'Exposição dialogada seguida de oficina prática guiada.',
+                dificuldades: 'Controle do tempo durante a atividade em equipe.',
+                licoes: 'Flexibilidade pedagógica e mediação ativa.',
+                feedback: 'Ótima receptividade e participação dos alunos.',
+                sugestoes: 'Manter atividades gamificadas.',
+                photos: []
+            });
+            renderRelatoriosEditor();
+            renderEbookPreview();
+        }
+
+        function uploadReportPhotos(event, rIdx) {
+            const files = Array.from(event.target.files);
+            if (!state.relatorios[rIdx].photos) state.relatorios[rIdx].photos = [];
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    state.relatorios[rIdx].photos.push(e.target.result);
+                    renderRelatoriosEditor();
+                    renderEbookPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Quantidade Dinâmica de Aulas (Frequência e Atividades)
+        function setNumAulas(val) {
+            const n = Math.max(1, Math.min(30, parseInt(val) || 1));
+            document.getElementById('input-num-aulas').value = n;
+
+            while (state.aulasMeta.length < n) {
+                const idx = state.aulasMeta.length + 1;
+                state.aulasMeta.push({
+                    num: idx,
+                    date: `${String((idx * 7) % 28 + 1).padStart(2, '0')}/05`,
+                    mod: `MÓDULO ${Math.ceil(idx / Math.max(1, Math.ceil(n / 4)))}`
+                });
+            }
+            if (state.aulasMeta.length > n) {
+                state.aulasMeta = state.aulasMeta.slice(0, n);
+            }
+
+            state.students.forEach(st => {
+                while (st.freq.length < n) st.freq.push('P');
+                if (st.freq.length > n) st.freq = st.freq.slice(0, n);
+                while (st.ativ.length < n) st.ativ.push('S');
+                if (st.ativ.length > n) st.ativ = st.ativ.slice(0, n);
+            });
+
+            const colsCode = `nome;nascimento;${state.aulasMeta.map((_, i) => 'a' + (i + 1)).join(';')}`;
+            const freqEl = document.getElementById('csv-modal-freq-cols');
+            const ativEl = document.getElementById('csv-modal-ativ-cols');
+            if (freqEl) freqEl.textContent = colsCode;
+            if (ativEl) ativEl.textContent = colsCode;
+
+            renderTablesEditor();
+            renderEbookPreview();
+        }
+
+        function syncAulasFromPlans() {
+            const total = Math.max(state.planos.length, state.relatorios.length, 1);
+            state.aulasMeta = [];
+            for (let i = 0; i < total; i++) {
+                const rep = state.relatorios[i];
+                const pl = state.planos[i];
+                const rawDate = rep && rep.data ? rep.data.slice(0, 5) : `${String((i * 7) % 28 + 1).padStart(2, '0')}/04`;
+                const mod = (pl && pl.modulo) || (rep && rep.modulo) || `MÓDULO ${Math.ceil((i + 1) / 3)}`;
+                state.aulasMeta.push({ num: i + 1, date: rawDate, mod });
+            }
+            setNumAulas(total);
+            showToast(`Sincronizado para ${total} aula(s)!`);
+        }
+
+        function renderTablesEditor() {
+            const nAulas = state.aulasMeta.length;
+            document.getElementById('input-num-aulas').value = nAulas;
+            document.getElementById('count-notas').textContent = state.students.length;
+
+            // Datas e módulos de cada aula
+            const metaGrid = document.getElementById('aulas-meta-grid');
+            metaGrid.innerHTML = state.aulasMeta.map((a, i) => `
+                <div class="bg-white border border-indigo-200 rounded p-1 flex items-center gap-1">
+                    <span class="text-[10px] font-bold text-indigo-700">A${i + 1}</span>
+                    <input type="text" value="${escapeHtml(a.date)}" oninput="state.aulasMeta[${i}].date=this.value;renderEbookPreview()" class="w-full text-[10px] border-b border-slate-200 focus:outline-none text-center" placeholder="dd/mm">
+                </div>
+            `).join('');
+
+            // Notas
+            const notasList = document.getElementById('notas-editor-list');
+            notasList.innerHTML = state.students.map((st, idx) => `
+                <div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-lg border border-slate-200 text-xs">
+                    <span class="w-5 text-[10px] font-bold text-slate-400">${idx + 1}</span>
+                    <input type="text" value="${escapeHtml(st.name)}" oninput="state.students[${idx}].name=this.value;renderEbookPreview()" class="flex-1 px-2 py-1 border rounded bg-white font-semibold text-[11px]" placeholder="Nome do Aluno">
+                    <input type="text" value="${escapeHtml(st.dob)}" oninput="state.students[${idx}].dob=this.value;renderEbookPreview()" class="w-20 px-1.5 py-1 border rounded bg-white text-[10px] text-center" placeholder="Nasc.">
+                    <input type="number" step="0.1" value="${st.n1}" oninput="state.students[${idx}].n1=parseFloat(this.value)||0;renderEbookPreview()" class="w-14 px-1 py-1 border rounded bg-white text-center font-bold text-[11px]" title="Nota 1">
+                    <input type="number" step="0.1" value="${st.n2}" oninput="state.students[${idx}].n2=parseFloat(this.value)||0;renderEbookPreview()" class="w-14 px-1 py-1 border rounded bg-white text-center font-bold text-[11px]" title="Nota 2">
+                    <button onclick="state.students.splice(${idx},1);renderTablesEditor();renderEbookPreview()" class="text-rose-500 hover:text-rose-700 px-1"><i class="ph-bold ph-trash"></i></button>
+                </div>
+            `).join('');
+
+            // Frequência Interativa
+            const freqList = document.getElementById('frequencia-editor-list');
+            freqList.innerHTML = state.students.map((st, idx) => `
+                <div class="bg-slate-50 p-2 rounded-lg border border-slate-200 space-y-1">
+                    <div class="text-[11px] font-bold text-slate-800 truncate">${idx + 1}. ${escapeHtml(st.name)}</div>
+                    <div class="flex flex-wrap gap-1">
+                        ${st.freq.slice(0, nAulas).map((val, aIdx) => `
+                            <button onclick="toggleFreq(${idx}, ${aIdx})" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${val === 'P' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-rose-100 text-rose-800 border-rose-300'}">
+                                A${aIdx + 1}:${val}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Atividades Interativas
+            const ativList = document.getElementById('atividades-editor-list');
+            ativList.innerHTML = state.students.map((st, idx) => `
+                <div class="bg-slate-50 p-2 rounded-lg border border-slate-200 space-y-1">
+                    <div class="text-[11px] font-bold text-slate-800 truncate">${idx + 1}. ${escapeHtml(st.name)}</div>
+                    <div class="flex flex-wrap gap-1">
+                        ${st.ativ.slice(0, nAulas).map((val, aIdx) => `
+                            <button onclick="toggleAtiv(${idx}, ${aIdx})" class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${val === 'S' ? 'bg-blue-100 text-blue-800 border-blue-300' : 'bg-amber-100 text-amber-800 border-amber-300'}">
+                                A${aIdx + 1}:${val}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleFreq(sIdx, aIdx) {
+            state.students[sIdx].freq[aIdx] = state.students[sIdx].freq[aIdx] === 'P' ? 'F' : 'P';
+            renderTablesEditor();
+            renderEbookPreview();
+        }
+
+        function toggleAtiv(sIdx, aIdx) {
+            state.students[sIdx].ativ[aIdx] = state.students[sIdx].ativ[aIdx] === 'S' ? 'N' : 'S';
+            renderTablesEditor();
+            renderEbookPreview();
+        }
+
+        function addStudentRow() {
+            const n = state.aulasMeta.length;
+            state.students.push({
+                name: 'NOVO ALUNO PARTICIPANTE',
+                dob: '01/01/2010',
+                n1: 8.0,
+                n2: 8.5,
+                freq: Array(n).fill('P'),
+                ativ: Array(n).fill('S')
+            });
+            renderTablesEditor();
+            renderEbookPreview();
+        }
+
+        // Editor de Anexos
+        function renderAnexosEditor() {
+            const container = document.getElementById('anexos-editor-list');
+            container.innerHTML = state.anexos.map((ax, idx) => `
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <input type="text" value="${escapeHtml(ax.title)}" oninput="state.anexos[${idx}].title=this.value;renderEbookPreview()" class="flex-1 px-2.5 py-1 text-xs font-bold border rounded bg-white" placeholder="Título do Anexo">
+                        <button onclick="state.anexos.splice(${idx},1);renderAnexosEditor();renderEbookPreview()" class="text-rose-500 hover:text-rose-700"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                    ${ax.image ? `<img src="${ax.image}" class="max-h-36 rounded border bg-white mx-auto object-contain">` : ''}
+                    <textarea rows="2" oninput="state.anexos[${idx}].content=this.value;renderEbookPreview()" class="w-full p-2 text-xs border rounded bg-white" placeholder="Descrição ou conteúdo do anexo...">${escapeHtml(ax.content || '')}</textarea>
+                </div>
+            `).join('');
+        }
+
+        function addTextAnexo() {
+            state.anexos.push({ title: 'Atividade Complementar / Anexo', content: 'Descrição da atividade ou material de apoio.', image: '' });
+            renderAnexosEditor();
+            renderEbookPreview();
+        }
+
+        function handleAnexosUpload(event) {
+            const files = Array.from(event.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    state.anexos.push({ title: file.name.replace(/\.[^/.]+$/, ''), content: '', image: e.target.result });
+                    renderAnexosEditor();
+                    renderEbookPreview();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // =========================================================================
+        // MOTOR DE PAGINAÇÃO E RENDERIZAÇÃO COMPLETA DO E-BOOK (A5 E A4)
+        // =========================================================================
+
+        function renderPageHeader(title) {
+            const isA5 = state.format === 'A5';
+            const hs = state.design.headerStyle;
+
+            if (hs === 'diamond') {
+                return `
+                <div class="w-full ${isA5 ? 'pt-3 px-4' : 'pt-5 px-7'} flex items-center shrink-0">
+                    <div class="${isA5 ? 'diamond-box-A5' : 'diamond-box-A4'}">
+                        <img src="${state.meta.projectLogo}" class="${isA5 ? 'w-11 h-11' : 'w-16 h-16'} object-contain -rotate-45 rounded-full">
+                    </div>
+                    <div class="-ml-3 flex-1 ${isA5 ? 'py-1.5 pl-6 pr-3' : 'py-2.5 pl-8 pr-4'} rounded-r-xl flex items-center" style="background: linear-gradient(90deg, var(--c1) 0%, var(--c2) 55%, rgba(255,255,255,0) 100%);">
+                        <h2 class="ebook-title-font font-extrabold ${isA5 ? 'text-xs' : 'text-base'} uppercase tracking-wider text-white drop-shadow-sm truncate">${escapeHtml(title)}</h2>
+                    </div>
+                </div>`;
+            }
+
+            if (hs === 'editorial') {
+                return `
+                <div class="w-full ${isA5 ? 'pt-4 px-5' : 'pt-6 px-8'} shrink-0">
+                    <div class="flex items-center justify-between border-b-2 pb-2" style="border-color: var(--c1);">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <span class="w-2.5 h-6 rounded-sm shrink-0" style="background: var(--spectrum-grad);"></span>
+                            <h2 class="ebook-title-font font-black ${isA5 ? 'text-xs' : 'text-base'} uppercase tracking-wider text-slate-900 truncate">${escapeHtml(title)}</h2>
+                        </div>
+                        <img src="${state.meta.projectLogo}" class="${isA5 ? 'w-6 h-6' : 'w-8 h-8'} object-contain shrink-0">
+                    </div>
+                </div>`;
+            }
+
+            if (hs === 'banner') {
+                return `
+                <div class="w-full ${isA5 ? 'px-4 py-2.5' : 'px-7 py-3.5'} flex items-center justify-between text-white shrink-0" style="background: var(--spectrum-grad);">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <img src="${state.meta.projectLogo}" class="${isA5 ? 'w-7 h-7' : 'w-9 h-9'} object-contain bg-white rounded-lg p-0.5 shrink-0">
+                        <h2 class="ebook-title-font font-black ${isA5 ? 'text-xs' : 'text-base'} uppercase tracking-wider truncate">${escapeHtml(title)}</h2>
+                    </div>
+                    <span class="text-[9px] font-bold opacity-85 uppercase">${escapeHtml(state.meta.titlePrefix + state.meta.titleGradient)}</span>
+                </div>`;
+            }
+
+            // Default: 'capsule' (Estilo LABMÍDIA Criativo)
+            return `
+            <div class="w-full ${isA5 ? 'pt-3 px-4' : 'pt-5 px-7'} shrink-0">
+                <div class="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-2xl ${isA5 ? 'p-1.5 pr-3' : 'p-2 pr-4'} shadow-sm">
+                    <div class="${isA5 ? 'w-9 h-9' : 'w-12 h-12'} rounded-xl p-0.5 shrink-0" style="background: var(--spectrum-grad);">
+                        <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center p-0.5">
+                            <img src="${state.meta.projectLogo}" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-[8px] font-extrabold uppercase tracking-widest text-slate-400">${escapeHtml(state.meta.titlePrefix + state.meta.titleGradient)}</div>
+                        <h2 class="ebook-title-font font-black ${isA5 ? 'text-xs' : 'text-base'} uppercase tracking-wide text-slate-800 truncate">${escapeHtml(title)}</h2>
+                    </div>
+                </div>
+                <div class="h-1 w-full rounded-full mt-1.5 bar-spectrum"></div>
+            </div>`;
+        }
+
+        function renderPageFooter(pageNumber) {
+            const isA5 = state.format === 'A5';
+            return `
+            <div class="w-full ${isA5 ? 'px-4 pb-2.5 pt-1.5' : 'px-7 pb-4 pt-2'} shrink-0">
+                <div class="border-t border-slate-200 pt-1.5 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        <span class="inline-flex items-center justify-center ${isA5 ? 'w-5 h-5 text-[9px]' : 'w-6 h-6 text-[10px]'} rounded-md font-extrabold text-white shrink-0" style="background: var(--c2);">${pageNumber}</span>
+                        <span class="${isA5 ? 'text-[8px]' : 'text-[9.5px]'} font-semibold text-slate-500 truncate">
+                            ${escapeHtml(state.meta.course)} • ${escapeHtml(state.meta.activity)} • ${escapeHtml(state.meta.classGroup)}
+                        </span>
+                    </div>
+                    <img src="${state.meta.instLogo}" class="${isA5 ? 'h-5' : 'h-6'} object-contain shrink-0">
+                </div>
+            </div>`;
+        }
+
+        function renderCoverPage() {
+            const isA5 = state.format === 'A5';
+            const cs = state.design.coverStyle;
+
+            if (cs === 'classic') {
+                return `
+                <div class="ebook-page size-${state.format} bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+                    <div class="flex-1 flex flex-col items-center justify-between ${isA5 ? 'p-6' : 'p-10'} text-center">
+                        <img src="${state.meta.instLogo}" class="${isA5 ? 'h-12' : 'h-16'} object-contain">
+                        <div class="my-auto flex flex-col items-center">
+                            <div class="${isA5 ? 'w-32 h-32' : 'w-44 h-44'} rounded-full p-1.5 shadow-xl mb-4" style="background: var(--spectrum-grad);">
+                                <div class="w-full h-full bg-white rounded-full flex items-center justify-center p-2">
+                                    <img src="${state.meta.projectLogo}" class="w-full h-full object-contain rounded-full">
+                                </div>
+                            </div>
+                            <h1 class="ebook-title-font font-black ${isA5 ? 'text-3xl' : 'text-5xl'} tracking-tight text-slate-900">
+                                ${escapeHtml(state.meta.titlePrefix)}<span class="text-spectrum">${escapeHtml(state.meta.titleGradient)}</span>
+                            </h1>
+                            <p class="mt-2 font-bold ${isA5 ? 'text-xs' : 'text-base'} uppercase tracking-widest text-slate-700">${escapeHtml(state.meta.subtitle)}</p>
+                            <p class="mt-2 ${isA5 ? 'text-[10px]' : 'text-xs'} text-slate-600 max-w-xs">${escapeHtml(state.meta.slogan)}</p>
+                        </div>
+                        <div class="w-full pt-3 border-t border-slate-300/80 text-slate-700 ${isA5 ? 'text-[10px]' : 'text-xs'} font-bold">
+                            <div>${escapeHtml(state.meta.course)}</div>
+                            <div class="text-slate-500 font-medium">${escapeHtml(state.meta.activity)} • ${escapeHtml(state.meta.classGroup)}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            if (cs === 'bold') {
+                return `
+                <div class="ebook-page size-${state.format} text-white" style="background: linear-gradient(145deg, var(--c1) 0%, var(--c2) 45%, var(--c3) 100%);">
+                    <div class="flex-1 flex flex-col items-center justify-between ${isA5 ? 'p-6' : 'p-10'} text-center">
+                        <div class="bg-white/95 px-4 py-2 rounded-2xl shadow-md">
+                            <img src="${state.meta.instLogo}" class="${isA5 ? 'h-9' : 'h-12'} object-contain">
+                        </div>
+                        <div class="my-auto flex flex-col items-center">
+                            <div class="${isA5 ? 'w-28 h-28' : 'w-40 h-40'} bg-white rounded-3xl p-3 shadow-2xl mb-4">
+                                <img src="${state.meta.projectLogo}" class="w-full h-full object-contain">
+                            </div>
+                            <h1 class="ebook-title-font font-black ${isA5 ? 'text-3xl' : 'text-5xl'} tracking-tight drop-shadow">
+                                ${escapeHtml(state.meta.titlePrefix)}${escapeHtml(state.meta.titleGradient)}
+                            </h1>
+                            <p class="mt-2 font-semibold ${isA5 ? 'text-[10px]' : 'text-xs'} tracking-[0.25em] uppercase opacity-90">${escapeHtml(state.meta.subtitleTop)}</p>
+                            <p class="font-extrabold ${isA5 ? 'text-xs' : 'text-base'} uppercase tracking-wider mt-0.5">${escapeHtml(state.meta.subtitle)}</p>
+                            <p class="mt-3 ${isA5 ? 'text-[10px]' : 'text-xs'} opacity-90 max-w-xs">${escapeHtml(state.meta.slogan)}</p>
+                        </div>
+                        <div class="w-full bg-black/20 backdrop-blur rounded-xl p-2.5 ${isA5 ? 'text-[9.5px]' : 'text-xs'} font-semibold">
+                            ${escapeHtml(state.meta.course)} • ${escapeHtml(state.meta.activity)} • ${escapeHtml(state.meta.classGroup)}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // Default: 'labmidia' (Fiel à Arte Oficial LABMÍDIA)
+            return `
+            <div class="ebook-page size-${state.format} bg-white">
+                <div class="h-2 w-full bar-spectrum shrink-0"></div>
+                <div class="flex-1 flex flex-col items-center justify-between ${isA5 ? 'px-6 py-6' : 'px-12 py-10'} text-center">
+                    <div class="w-full flex items-center justify-between text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                        <span>${escapeHtml(state.meta.course)}</span>
+                        <span>${escapeHtml(state.meta.classGroup)}</span>
+                    </div>
+
+                    <div class="my-auto flex flex-col items-center w-full">
+                        <img src="${state.meta.projectLogo}" class="${isA5 ? 'w-36 h-36' : 'w-52 h-52'} object-contain mb-3 drop-shadow-sm">
+                        <h1 class="ebook-title-font font-black ${isA5 ? 'text-4xl' : 'text-6xl'} tracking-tight leading-none">
+                            <span class="text-slate-950">${escapeHtml(state.meta.titlePrefix)}</span><span class="text-spectrum">${escapeHtml(state.meta.titleGradient)}</span>
+                        </h1>
+                        <p class="${isA5 ? 'text-[9.5px] mt-2.5' : 'text-xs mt-4'} font-medium tracking-[0.28em] uppercase text-slate-600">
+                            ${escapeHtml(state.meta.subtitleTop)}
+                        </p>
+                        <p class="ebook-title-font ${isA5 ? 'text-xs mt-0.5' : 'text-base mt-1'} font-extrabold tracking-[0.12em] uppercase text-slate-950">
+                            ${escapeHtml(state.meta.subtitle)}
+                        </p>
+                        <div class="${isA5 ? 'w-56 h-1.5 mt-2.5' : 'w-80 h-2 mt-3.5'} rounded-full bar-spectrum"></div>
+                        <p class="${isA5 ? 'text-[9.5px] mt-3' : 'text-xs mt-4'} text-slate-500 max-w-xs font-medium leading-relaxed">
+                            ${escapeHtml(state.meta.slogan)}
+                        </p>
+                    </div>
+
+                    <div class="w-full flex flex-col items-center gap-2 pt-3 border-t border-slate-100">
+                        <img src="${state.meta.instLogo}" class="${isA5 ? 'h-11' : 'h-14'} object-contain">
+                        <div class="${isA5 ? 'text-[8.5px]' : 'text-[10px]'} font-bold text-slate-400 uppercase tracking-wider">
+                            ${escapeHtml(state.meta.activity)} • ${escapeHtml(state.meta.school)}
+                        </div>
+                    </div>
+                </div>
+                <div class="h-1.5 w-full bar-spectrum shrink-0"></div>
+            </div>`;
+        }
+
+        function paginateTextParagraphs(text, maxChars) {
+            const clean = (text || '').trim();
+            if (!clean) return [''];
+            const paras = clean.split(/\n+/);
+            const chunks = [];
+            let current = '';
+
+            paras.forEach(p => {
+                if ((current + '\n\n' + p).length > maxChars && current.length > 0) {
+                    chunks.push(current.trim());
+                    current = p;
+                } else {
+                    current = current ? (current + '\n\n' + p) : p;
+                }
+            });
+            if (current.trim()) chunks.push(current.trim());
+            return chunks;
+        }
+
+        function renderEbookPreview() {
+            const isA5 = state.format === 'A5';
+            const maxCharsPerPage = isA5 ? 1050 : 2100;
+            const contentPages = [];
+            const tocEntries = [];
+
+            const addContentPage = (title, bodyHtml, registerTocTitle = null) => {
+                const pageNum = contentPages.length + 3; // Pag 1 = Capa, Pag 2 = Índice
+                if (registerTocTitle) {
+                    tocEntries.push({ title: registerTocTitle, page: pageNum });
+                }
+                contentPages.push(`
+                    <div class="ebook-page size-${state.format}">
+                        ${renderPageHeader(title)}
+                        <div class="flex-1 ${isA5 ? 'px-5 py-2.5 text-[10px]' : 'px-8 py-4 text-[12.5px]'} text-slate-700 leading-relaxed overflow-hidden flex flex-col justify-start">
+                            ${bodyHtml}
+                        </div>
+                        ${renderPageFooter(pageNum)}
+                    </div>
+                `);
+            };
+
+            // 1. APRESENTAÇÃO DA EQUIPE
+            const teamHtml = `
+                <div class="text-center ${isA5 ? 'mb-2' : 'mb-4'}">
+                    <div class="font-extrabold text-slate-800 ${isA5 ? 'text-[10px]' : 'text-xs'} uppercase">${escapeHtml(state.meta.inst)} - ${escapeHtml(state.meta.campus)}</div>
+                    <div class="text-slate-500 ${isA5 ? 'text-[9px]' : 'text-[11px]'}">Coordenação do Curso de ${escapeHtml(state.meta.course)} • ${escapeHtml(state.meta.activity)}</div>
+                </div>
+                <div class="grid grid-cols-3 ${isA5 ? 'gap-2 my-auto' : 'gap-4 my-auto'}">
+                    ${state.team.map(m => `
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl ${isA5 ? 'p-2' : 'p-3'} flex flex-col items-center text-center shadow-sm">
+                            <div class="${isA5 ? 'w-11 h-11' : 'w-16 h-16'} rounded-full p-0.5 mb-1.5" style="background: var(--spectrum-grad);">
+                                <div class="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center">
+                                    ${m.photo ? `<img src="${m.photo}" class="w-full h-full object-cover">` : `<span class="font-black text-slate-700 ${isA5 ? 'text-xs' : 'text-sm'}">${escapeHtml((m.name||'M')[0])}</span>`}
+                                </div>
+                            </div>
+                            <div class="font-bold text-slate-800 ${isA5 ? 'text-[9px]' : 'text-xs'} leading-tight">${escapeHtml(m.name)}</div>
+                            <div class="text-slate-500 ${isA5 ? 'text-[7.5px]' : 'text-[10px]'} mt-0.5">${escapeHtml(m.role)}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            addContentPage('APRESENTAÇÃO', teamHtml, 'APRESENTAÇÃO');
+
+            // Galeria de Fotos da Apresentação (se houver)
+            if (state.introPhotos.length > 0) {
+                const galHtml = `
+                    <div class="grid grid-cols-2 gap-2 my-auto">
+                        ${state.introPhotos.slice(0, 4).map(src => `
+                            <div class="rounded-xl overflow-hidden border border-slate-200 aspect-video bg-slate-100 shadow-sm">
+                                <img src="${src}" class="w-full h-full object-cover">
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                addContentPage('APRESENTAÇÃO - REGISTROS', galHtml);
+            }
+
+            // 2. SEÇÕES TEÓRICAS DO PROJETO
+            state.sections.forEach(sec => {
+                const chunks = paginateTextParagraphs(sec.content, maxCharsPerPage);
+                chunks.forEach((chunk, cIdx) => {
+                    const formatted = chunk.split(/\n\n+/).map(p => `<p class="mb-2.5 text-justify">${escapeHtml(p).replace(/\n/g, '<br>')}</p>`).join('');
+                    addContentPage(sec.title, formatted, cIdx === 0 ? sec.title : null);
+                });
+            });
+
+            // 3. CRONOGRAMA
+            if (state.cronograma.length > 0) {
+                const cronoHtml = `
+                    <div class="my-auto overflow-hidden rounded-xl border border-slate-200 shadow-sm">
+                        <table class="w-full border-collapse text-left ${isA5 ? 'text-[8.5px]' : 'text-[11px]'}">
+                            <thead>
+                                <tr class="text-white" style="background: var(--spectrum-grad);">
+                                    <th class="p-1.5 font-extrabold">MÓDULO</th>
+                                    <th class="p-1.5 font-extrabold">DATA</th>
+                                    <th class="p-1.5 font-extrabold">MINISTRANTES</th>
+                                    <th class="p-1.5 font-extrabold">UNIDADE / TÓPICO</th>
+                                    <th class="p-1.5 font-extrabold text-center">CH</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                ${state.cronograma.map((c, i) => `
+                                    <tr class="${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'}">
+                                        <td class="p-1.5 font-bold text-slate-900">${escapeHtml(c.modulo)}</td>
+                                        <td class="p-1.5 text-slate-600">${escapeHtml(c.periodo)}<br><span class="text-[8px] font-semibold">${escapeHtml(c.horario)}</span></td>
+                                        <td class="p-1.5 text-slate-700">${escapeHtml(c.ministrantes)}</td>
+                                        <td class="p-1.5 font-semibold text-slate-800">${escapeHtml(c.titulo)}</td>
+                                        <td class="p-1.5 font-bold text-center text-blue-700">${escapeHtml(c.cargaHoraria)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                addContentPage('CRONOGRAMA', cronoHtml, 'CRONOGRAMA');
+            }
+
+            // 4. PLANOS DE AULA
+            state.planos.forEach((p, idx) => {
+                const planHtml = `
+                    <div class="space-y-2">
+                        <div class="bg-slate-50 border-l-4 p-2 rounded-r-lg" style="border-color: var(--c1);">
+                            <div class="text-[8.5px] font-extrabold uppercase tracking-wider text-slate-500">${escapeHtml(p.modulo)}</div>
+                            <div class="font-extrabold text-slate-900 ${isA5 ? 'text-xs' : 'text-sm'}">${escapeHtml(p.titulo)}</div>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px] tracking-wider mb-0.5">Objetivos:</h4>
+                            <p class="text-justify whitespace-pre-line">${escapeHtml(p.objetivos)}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px] tracking-wider mb-0.5">Conteúdo Programático:</h4>
+                            <p class="text-justify whitespace-pre-line">${escapeHtml(p.conteudo)}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px] tracking-wider mb-0.5">Procedimentos Metodológicos:</h4>
+                            <p class="text-justify whitespace-pre-line">${escapeHtml(p.metodologia)}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px] tracking-wider mb-0.5">Avaliação:</h4>
+                            <p class="text-justify whitespace-pre-line">${escapeHtml(p.avaliacao)}</p>
+                        </div>
+                    </div>
+                `;
+                addContentPage(`PLANO DE AULA ${p.aula}`, planHtml, idx === 0 ? 'PLANOS DE AULA' : null);
+            });
+
+            // 5. RELATÓRIOS E FOTOS DE AULA
+            state.relatorios.forEach((r, idx) => {
+                const repHtml = `
+                    <div class="space-y-1.5">
+                        <div class="grid grid-cols-2 gap-1 bg-slate-50 border border-slate-200 rounded-lg p-2 ${isA5 ? 'text-[8.5px]' : 'text-[10.5px]'}">
+                            <div><strong>Monitores:</strong> ${escapeHtml(r.monitores)}</div>
+                            <div><strong>Apoio:</strong> ${escapeHtml(r.apoio)}</div>
+                            <div><strong>Prof. Disciplina:</strong> ${escapeHtml(r.professor)}</div>
+                            <div><strong>Supervisor:</strong> ${escapeHtml(r.supervisor)}</div>
+                            <div><strong>Carga Horária:</strong> ${escapeHtml(r.cargaHoraria)}</div>
+                            <div><strong>Data:</strong> ${escapeHtml(r.data)}</div>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px]">Objetivo Geral da Aula:</h4>
+                            <p class="text-justify">${escapeHtml(r.objetivo)}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px]">Planejamento e Execução:</h4>
+                            <p class="text-justify">${escapeHtml(r.planejamento)}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px]">Dificuldades & Superações:</h4>
+                            <p class="text-justify">${escapeHtml(r.dificuldades)} ${escapeHtml(r.licoes || '')}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-800 uppercase text-[9px]">Feedback da Turma & Sugestões:</h4>
+                            <p class="text-justify">${escapeHtml(r.feedback)} ${escapeHtml(r.sugestoes || '')}</p>
+                        </div>
+                    </div>
+                `;
+                addContentPage(`RELATÓRIO DE AULA ${r.aula} - ${r.modulo}`, repHtml, idx === 0 ? 'RELATÓRIOS E FOTOS' : null);
+
+                if (r.photos && r.photos.length > 0) {
+                    const phHtml = `
+                        <div class="grid grid-cols-2 gap-2 my-auto">
+                            ${r.photos.slice(0, 6).map(ph => `
+                                <div class="rounded-lg overflow-hidden border border-slate-200 aspect-video bg-slate-100">
+                                    <img src="${ph}" class="w-full h-full object-cover">
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    addContentPage(`FOTOS DE AULA ${r.aula} - ${r.modulo}`, phHtml);
+                }
+            });
+
+            // 6. REFERÊNCIAS
+            if (state.referencias.trim()) {
+                const refChunks = paginateTextParagraphs(state.referencias, maxCharsPerPage);
+                refChunks.forEach((chunk, idx) => {
+                    const html = chunk.split(/\n\n+/).map(p => `<p class="mb-2 text-justify">${escapeHtml(p)}</p>`).join('');
+                    addContentPage('REFERÊNCIAS', html, idx === 0 ? 'REFERÊNCIAS' : null);
+                });
+            }
+
+            // 7. RELATÓRIO DE CONCLUSÃO
+            if (state.conclusao.trim()) {
+                const concChunks = paginateTextParagraphs(state.conclusao, maxCharsPerPage);
+                concChunks.forEach((chunk, idx) => {
+                    const html = chunk.split(/\n\n+/).map(p => `<p class="mb-2.5 text-justify">${escapeHtml(p)}</p>`).join('');
+                    addContentPage('RELATÓRIO DE CONCLUSÃO', html, idx === 0 ? 'RELATÓRIO DE CONCLUSÃO' : null);
+                });
+            }
+
+            // 8. APROVADOS (LISTAGEM DE NOTAS)
+            const rowsPerPage = isA5 ? 16 : 25;
+            for (let i = 0; i < state.students.length; i += rowsPerPage) {
+                const slice = state.students.slice(i, i + rowsPerPage);
+                const notasTableHtml = `
+                    <div class="overflow-hidden rounded-lg border border-slate-200">
+                        <table class="w-full border-collapse ${isA5 ? 'text-[7.5px]' : 'text-[9.5px]'}">
+                            <thead>
+                                <tr class="text-white" style="background: var(--spectrum-grad);">
+                                    <th class="p-1 text-center">Nº</th>
+                                    <th class="p-1 text-left">Nome do Aluno</th>
+                                    <th class="p-1 text-center">Nasc.</th>
+                                    <th class="p-1 text-center">N1</th>
+                                    <th class="p-1 text-center">N2</th>
+                                    <th class="p-1 text-center">Soma</th>
+                                    <th class="p-1 text-center">Média</th>
+                                    <th class="p-1 text-center">Situação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                ${slice.map((st, sIdx) => {
+                                    const soma = (Number(st.n1) || 0) + (Number(st.n2) || 0);
+                                    const media = soma / 2;
+                                    const aprov = media >= 7.0;
+                                    return `
+                                    <tr class="${sIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}">
+                                        <td class="p-1 text-center font-bold">${i + sIdx + 1}</td>
+                                        <td class="p-1 font-semibold text-slate-800 truncate max-w-[140px]">${escapeHtml(st.name)}</td>
+                                        <td class="p-1 text-center text-slate-500">${escapeHtml(st.dob)}</td>
+                                        <td class="p-1 text-center">${Number(st.n1).toFixed(1).replace('.', ',')}</td>
+                                        <td class="p-1 text-center">${Number(st.n2).toFixed(1).replace('.', ',')}</td>
+                                        <td class="p-1 text-center font-semibold">${soma.toFixed(1).replace('.', ',')}</td>
+                                        <td class="p-1 text-center font-extrabold">${media.toFixed(1).replace('.', ',')}</td>
+                                        <td class="p-1 text-center font-extrabold ${aprov ? 'text-emerald-700' : 'text-rose-600'}">${aprov ? '✔ APROVADO' : '✘ REPROVADO'}</td>
+                                    </tr>`;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-1.5 text-[8px] font-bold text-slate-500 text-right">Critério de Certificação: Média Final ≥ 7,0</div>
+                `;
+                addContentPage('APROVADOS - RESULTADO FINAL', notasTableHtml, i === 0 ? 'APROVADOS' : null);
+            }
+
+            // 9. FREQUÊNCIA GERAL DINÂMICA
+            const nAulas = state.aulasMeta.length;
+            for (let i = 0; i < state.students.length; i += rowsPerPage) {
+                const slice = state.students.slice(i, i + rowsPerPage);
+                const freqHtml = `
+                    <div class="overflow-hidden rounded-lg border border-slate-200">
+                        <table class="w-full border-collapse ${isA5 ? 'text-[6.2px]' : 'text-[8px]'}">
+                            <thead>
+                                <tr class="text-white" style="background: var(--spectrum-grad);">
+                                    <th class="p-0.5 text-center">Nº</th>
+                                    <th class="p-0.5 text-left">Aluno</th>
+                                    ${state.aulasMeta.map((a, idx) => `<th class="p-0.5 text-center">A${idx + 1}<br><span class="font-normal opacity-85">${escapeHtml(a.date)}</span></th>`).join('')}
+                                    <th class="p-0.5 text-center">P</th>
+                                    <th class="p-0.5 text-center">F</th>
+                                    <th class="p-0.5 text-center">%</th>
+                                    <th class="p-0.5 text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                ${slice.map((st, sIdx) => {
+                                    const arr = st.freq.slice(0, nAulas);
+                                    const pres = arr.filter(x => x === 'P').length;
+                                    const falt = nAulas - pres;
+                                    const perc = Math.round((pres / nAulas) * 100);
+                                    const aprov = perc >= 75;
+                                    return `
+                                    <tr class="${sIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}">
+                                        <td class="p-0.5 text-center font-bold">${i + sIdx + 1}</td>
+                                        <td class="p-0.5 font-semibold truncate max-w-[95px]">${escapeHtml(st.name)}</td>
+                                        ${arr.map(v => `<td class="p-0.5 text-center font-bold ${v === 'P' ? 'text-emerald-700' : 'text-rose-600'}">${v}</td>`).join('')}
+                                        <td class="p-0.5 text-center font-bold">${pres}</td>
+                                        <td class="p-0.5 text-center">${falt}</td>
+                                        <td class="p-0.5 text-center font-bold">${perc}%</td>
+                                        <td class="p-0.5 text-center font-bold ${aprov ? 'text-emerald-700' : 'text-rose-600'}">${aprov ? '✔' : '✘'}</td>
+                                    </tr>`;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-1 text-[7.5px] font-bold text-slate-500">Legenda: P = Presente | F = Falta | Aprovado: ≥ 75% de presença (${nAulas} aulas registradas)</div>
+                `;
+                addContentPage('FREQUÊNCIA GERAL', freqHtml, i === 0 ? 'FREQUÊNCIAS' : null);
+            }
+
+            // 10. PARTICIPAÇÃO EM ATIVIDADES DINÂMICA
+            for (let i = 0; i < state.students.length; i += rowsPerPage) {
+                const slice = state.students.slice(i, i + rowsPerPage);
+                const ativHtml = `
+                    <div class="overflow-hidden rounded-lg border border-slate-200">
+                        <table class="w-full border-collapse ${isA5 ? 'text-[6.2px]' : 'text-[8px]'}">
+                            <thead>
+                                <tr class="text-white" style="background: var(--spectrum-grad);">
+                                    <th class="p-0.5 text-center">Nº</th>
+                                    <th class="p-0.5 text-left">Aluno</th>
+                                    ${state.aulasMeta.map((a, idx) => `<th class="p-0.5 text-center">A${idx + 1}</th>`).join('')}
+                                    <th class="p-0.5 text-center">Sim</th>
+                                    <th class="p-0.5 text-center">Não</th>
+                                    <th class="p-0.5 text-center">%</th>
+                                    <th class="p-0.5 text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                ${slice.map((st, sIdx) => {
+                                    const arr = st.ativ.slice(0, nAulas);
+                                    const sim = arr.filter(x => x === 'S').length;
+                                    const nao = nAulas - sim;
+                                    const perc = Math.round((sim / nAulas) * 100);
+                                    const aprov = perc >= 75;
+                                    return `
+                                    <tr class="${sIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}">
+                                        <td class="p-0.5 text-center font-bold">${i + sIdx + 1}</td>
+                                        <td class="p-0.5 font-semibold truncate max-w-[95px]">${escapeHtml(st.name)}</td>
+                                        ${arr.map(v => `<td class="p-0.5 text-center font-bold ${v === 'S' ? 'text-blue-700' : 'text-amber-600'}">${v}</td>`).join('')}
+                                        <td class="p-0.5 text-center font-bold">${sim}</td>
+                                        <td class="p-0.5 text-center">${nao}</td>
+                                        <td class="p-0.5 text-center font-bold">${perc}%</td>
+                                        <td class="p-0.5 text-center font-bold ${aprov ? 'text-emerald-700' : 'text-rose-600'}">${aprov ? '✔' : '✘'}</td>
+                                    </tr>`;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-1 text-[7.5px] font-bold text-slate-500">Legenda: S = Fez Atividade | N = Não Fez | Meta: ≥ 75% de participação</div>
+                `;
+                addContentPage('ATIVIDADES GERAL', ativHtml);
+            }
+
+            // 11. ANEXOS
+            state.anexos.forEach((ax, idx) => {
+                const axHtml = `
+                    <div class="space-y-2 my-auto">
+                        <h3 class="font-extrabold text-slate-900 ${isA5 ? 'text-xs' : 'text-sm'}">${escapeHtml(ax.title)}</h3>
+                        ${ax.image ? `<div class="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 p-1"><img src="${ax.image}" class="max-h-96 mx-auto object-contain"></div>` : ''}
+                        ${ax.content ? `<p class="text-justify whitespace-pre-line">${escapeHtml(ax.content)}</p>` : ''}
+                    </div>
+                `;
+                addContentPage('ANEXOS', axHtml, idx === 0 ? 'ANEXOS' : null);
+            });
+
+            // PÁGINA 2: ÍNDICE AUTOMÁTICO
+            const tocPageHtml = `
+                <div class="ebook-page size-${state.format}">
+                    ${renderPageHeader('ÍNDICE CONTEÚDO')}
+                    <div class="flex-1 ${isA5 ? 'px-5 py-3' : 'px-8 py-6'} flex flex-col justify-center">
+                        <div class="space-y-1.5">
+                            ${tocEntries.map(item => `
+                                <div class="flex items-center justify-between ${isA5 ? 'text-[9.5px] py-1' : 'text-xs py-1.5'} border-b border-dashed border-slate-200">
+                                    <span class="font-extrabold text-slate-800 uppercase tracking-wide">${escapeHtml(item.title)}</span>
+                                    <span class="px-2 py-0.5 rounded-md font-extrabold text-white text-[9px]" style="background: var(--c2);">${item.page}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ${renderPageFooter(2)}
+                </div>
+            `;
+
+            const finalHtml = renderCoverPage() + tocPageHtml + contentPages.join('');
+            document.getElementById('ebook-canvas').innerHTML = finalHtml;
+            document.getElementById('page-counter-badge').textContent = `${contentPages.length + 2} páginas`;
+        }
+
+        // =========================================================================
+        // IMPORTAÇÃO E EXPORTAÇÃO DE PLANILHAS CSV E JSON
+        // =========================================================================
+
+        function openCsvTemplatesModal() {
+            const modal = document.getElementById('csv-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCsvTemplatesModal() {
+            const modal = document.getElementById('csv-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function downloadCsvTemplate(type) {
+            let csvContent = '\uFEFF'; // BOM UTF-8 para Excel
+            const nAulas = state.aulasMeta.length;
+
+            if (type === 'cronograma') {
+                csvContent += 'modulo;periodo;ministrantes;horario;titulo;cargaHoraria\n';
+                state.cronograma.forEach(c => {
+                    csvContent += `${c.modulo};${c.periodo};${c.ministrantes};${c.horario};${c.titulo};${c.cargaHoraria}\n`;
+                });
+            } else if (type === 'planos') {
+                csvContent += 'aula;modulo;titulo;objetivos;conteudo;metodologia;avaliacao\n';
+                state.planos.forEach(p => {
+                    csvContent += `${p.aula};${p.modulo};${p.titulo.replace(/;/g,',')};${p.objetivos.replace(/\n/g,' | ')};${p.conteudo.replace(/\n/g,' | ')};${p.metodologia.replace(/\n/g,' | ')};${p.avaliacao.replace(/\n/g,' | ')}\n`;
+                });
+            } else if (type === 'relatorios') {
+                csvContent += 'aula;modulo;monitores;apoio;professor;supervisor;cargaHoraria;data;objetivo;alinhamento;planejamento;dificuldades;licoes;feedback;sugestoes\n';
+                state.relatorios.forEach(r => {
+                    csvContent += `${r.aula};${r.modulo};${r.monitores};${r.apoio};${r.professor};${r.supervisor};${r.cargaHoraria};${r.data};${r.objetivo};${r.alinhamento};${r.planejamento};${r.dificuldades};${r.licoes};${r.feedback};${r.sugestoes}\n`;
+                });
+            } else if (type === 'notas') {
+                csvContent += 'nome;nascimento;nota1;nota2\n';
+                state.students.forEach(s => {
+                    csvContent += `${s.name};${s.dob};${s.n1};${s.n2}\n`;
+                });
+            } else if (type === 'frequencia') {
+                const aCols = state.aulasMeta.map((_, i) => `a${i + 1}`).join(';');
+                csvContent += `nome;nascimento;${aCols}\n`;
+                state.students.forEach(s => {
+                    csvContent += `${s.name};${s.dob};${s.freq.slice(0, nAulas).join(';')}\n`;
+                });
+            } else if (type === 'atividades') {
+                const aCols = state.aulasMeta.map((_, i) => `a${i + 1}`).join(';');
+                csvContent += `nome;nascimento;${aCols}\n`;
+                state.students.forEach(s => {
+                    csvContent += `${s.name};${s.dob};${s.ativ.slice(0, nAulas).join(';')}\n`;
+                });
+            }
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `modelo_${type}_labmidia.csv`;
+            link.click();
+            showToast(`Modelo CSV (${type}) baixado!`);
+        }
+
+        function importCsvData(event, type) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const lines = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+                if (lines.length < 2) return;
+                const sep = lines[0].includes(';') ? ';' : ',';
+                const rows = lines.slice(1).map(line => line.split(sep).map(c => c.trim()));
+
+                if (type === 'cronograma') {
+                    state.cronograma = rows.map(r => ({
+                        modulo: r[0] || '', periodo: r[1] || '', ministrantes: r[2] || '',
+                        horario: r[3] || '', titulo: r[4] || '', cargaHoraria: r[5] || ''
+                    }));
+                    renderCronogramaEditor();
+                } else if (type === 'planos') {
+                    state.planos = rows.map(r => ({
+                        aula: r[0] || '01', modulo: r[1] || 'MÓDULO I', titulo: r[2] || '',
+                        objetivos: (r[3] || '').replace(/\s*\|\s*/g, '\n'),
+                        conteudo: (r[4] || '').replace(/\s*\|\s*/g, '\n'),
+                        metodologia: (r[5] || '').replace(/\s*\|\s*/g, '\n'),
+                        avaliacao: (r[6] || '').replace(/\s*\|\s*/g, '\n')
+                    }));
+                    renderPlanosEditor();
+                } else if (type === 'relatorios') {
+                    state.relatorios = rows.map(r => ({
+                        aula: r[0] || '01', modulo: r[1] || 'MÓDULO I', monitores: r[2] || '',
+                        apoio: r[3] || '', professor: r[4] || '', supervisor: r[5] || '',
+                        cargaHoraria: r[6] || '2h', data: r[7] || '', objetivo: r[8] || '',
+                        alinhamento: r[9] || '', planejamento: r[10] || '', dificuldades: r[11] || '',
+                        licoes: r[12] || '', feedback: r[13] || '', sugestoes: r[14] || '', photos: []
+                    }));
+                    renderRelatoriosEditor();
+                } else if (type === 'notas') {
+                    rows.forEach((r, idx) => {
+                        const n1 = parseFloat((r[2] || '0').replace(',', '.')) || 0;
+                        const n2 = parseFloat((r[3] || '0').replace(',', '.')) || 0;
+                        if (state.students[idx]) {
+                            state.students[idx].name = r[0] || state.students[idx].name;
+                            state.students[idx].dob = r[1] || state.students[idx].dob;
+                            state.students[idx].n1 = n1;
+                            state.students[idx].n2 = n2;
+                        } else {
+                            state.students.push({
+                                name: r[0] || 'ALUNO', dob: r[1] || '', n1, n2,
+                                freq: Array(state.aulasMeta.length).fill('P'),
+                                ativ: Array(state.aulasMeta.length).fill('S')
+                            });
+                        }
+                    });
+                    renderTablesEditor();
+                } else if (type === 'frequencia' || type === 'atividades') {
+                    const detectedAulas = Math.max(1, rows[0].length - 2);
+                    setNumAulas(detectedAulas);
+                    state.students = rows.map((r, idx) => {
+                        const existing = state.students[idx] || { n1: 8.0, n2: 8.0, freq: [], ativ: [] };
+                        const vals = r.slice(2, 2 + detectedAulas).map(v => v.toUpperCase());
+                        return {
+                            name: r[0] || 'ALUNO',
+                            dob: r[1] || '',
+                            n1: existing.n1,
+                            n2: existing.n2,
+                            freq: type === 'frequencia' ? vals.map(v => v === 'F' ? 'F' : 'P') : (existing.freq.length === detectedAulas ? existing.freq : Array(detectedAulas).fill('P')),
+                            ativ: type === 'atividades' ? vals.map(v => v === 'N' ? 'N' : 'S') : (existing.ativ.length === detectedAulas ? existing.ativ : Array(detectedAulas).fill('S'))
+                        };
+                    });
+                    renderTablesEditor();
+                }
+
+                renderEbookPreview();
+                closeCsvTemplatesModal();
+                showToast(`Planilha CSV (${type}) importada com sucesso!`);
+            };
+            reader.readAsText(file);
+        }
+
+        // Projetos Modelo e Limpeza
+        function loadPresetProject(type) {
+            state = getLabMidiaDefaultState();
+            if (type === 'clickseguro') {
+                state.meta.titlePrefix = 'Click@';
+                state.meta.titleGradient = 'Seguro';
+                state.meta.subtitleTop = 'IA E SEGURANÇA DIGITAL';
+                state.meta.subtitle = 'UM CLIQUE CONSCIENTE PARA UM FUTURO DIGITAL SEGURO';
+                state.meta.slogan = 'Educação digital crítica, ética e segura no ensino médio';
+                applyVisualPreset('clickseguro');
+            } else {
+                applyVisualPreset('labmidia');
+            }
+            initAllEditors();
+            showToast('Projeto modelo carregado!');
+        }
+
+        function clearAllProject() {
+            state.sections.forEach(s => s.content = '');
+            state.cronograma = [];
+            state.planos = [];
+            state.relatorios = [];
+            state.anexos = [];
+            initAllEditors();
+            showToast('Conteúdos limpos para novo preenchimento!');
+        }
+
+        // Salvar e Abrir .JSON
+        function exportProjectJson() {
+            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `ebook_${(state.meta.titlePrefix + state.meta.titleGradient).toLowerCase()}.json`;
+            a.click();
+            showToast('Arquivo .JSON salvo!');
+        }
+
+        function importProjectJson(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    state = JSON.parse(e.target.result);
+                    initAllEditors();
+                    showToast('Projeto carregado com sucesso!');
+                } catch (err) {
+                    showToast('Erro ao ler arquivo JSON.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Zoom e Impressão PDF
+        function adjustZoom(delta) {
+            currentZoom = delta === 0 ? 1 : Math.min(1.5, Math.max(0.5, currentZoom + delta));
+            document.getElementById('ebook-canvas').style.transform = `scale(${currentZoom})`;
+            document.getElementById('zoom-label').textContent = `${Math.round(currentZoom * 100)}%`;
+        }
+
+        function printEbook() {
+            window.print();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3200);
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function initAllEditors() {
+            syncDesignInputs();
+            applyCssVariables();
+            setPageFormat(state.format || 'A5');
+            renderTeamEditor();
+            renderSectionsEditor();
+            renderCronogramaEditor();
+            renderPlanosEditor();
+            renderRelatoriosEditor();
+            setNumAulas(state.aulasMeta ? state.aulasMeta.length : 12);
+            renderAnexosEditor();
+            renderEbookPreview();
+        }
+
+        window.onload = function () {
+            initAllEditors();
+        };
+    </script>
+</body>
+</html>
