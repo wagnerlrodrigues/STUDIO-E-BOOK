@@ -593,13 +593,59 @@
 
                 <!-- ABA 7: TABELAS CSV (NOTAS, FREQUÊNCIA E ATIVIDADES) -->
                 <div id="tab-tabelas" class="tab-pane hidden space-y-5">
+                    
+                    <!-- Painel de Configuração Dinâmica da Quantidade Real de Aulas -->
+                    <div class="border-2 border-cyan-500/40 rounded-2xl p-3.5 bg-gradient-to-br from-cyan-50/60 via-white to-fuchsia-50/40 shadow-sm space-y-3">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-cyan-600 text-white">Configuração Dinâmica de Aulas</span>
+                                <h4 class="text-sm font-bold text-slate-900 mt-1">Quantidade Real de Aulas do Curso</h4>
+                                <p class="text-[11px] text-slate-600">Define as colunas de Frequência e Atividades, datas, módulos e cálculos de aprovação (≥ 75%).</p>
+                            </div>
+                            <button onclick="syncClassesFromPlansAndReports()" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition" title="Puxar quantidade, datas e módulos dos Planos/Relatórios cadastrados">
+                                <i class="ph-bold ph-arrows-clockwise"></i> Sincronizar com Planos/Relatórios
+                            </button>
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-slate-200/80">
+                            <div class="flex items-center gap-2">
+                                <label class="text-xs font-bold text-slate-700">Total de Aulas:</label>
+                                <div class="flex items-center border border-slate-300 rounded-lg bg-white overflow-hidden">
+                                    <button onclick="changeTotalClassesCount(-1)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">-</button>
+                                    <input type="number" id="dynamic-class-count-input" min="1" max="40" onchange="setTotalClassesCount(this.value)" class="w-12 text-center text-xs font-extrabold text-slate-900 outline-none py-1">
+                                    <button onclick="changeTotalClassesCount(1)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs">+</button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center gap-1">
+                                <span class="text-[10px] font-semibold text-slate-500 mr-1">Atalhos:</span>
+                                <button onclick="setTotalClassesCount(4)" class="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold text-slate-700">4 aulas</button>
+                                <button onclick="setTotalClassesCount(5)" class="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold text-slate-700">5 aulas</button>
+                                <button onclick="setTotalClassesCount(6)" class="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold text-slate-700">6 aulas</button>
+                                <button onclick="setTotalClassesCount(8)" class="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold text-slate-700">8 aulas</button>
+                                <button onclick="setTotalClassesCount(10)" class="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold text-slate-700">10 aulas</button>
+                                <button onclick="setTotalClassesCount(12)" class="px-2 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-[10px] font-bold text-slate-700">12 aulas</button>
+                            </div>
+                        </div>
+
+                        <!-- Editor de Datas e Módulos de Cada Aula -->
+                        <details class="group bg-white border border-slate-200 rounded-xl overflow-hidden">
+                            <summary class="px-3 py-2 bg-slate-50 hover:bg-slate-100 cursor-pointer flex items-center justify-between text-xs font-bold text-slate-700">
+                                <span class="flex items-center gap-1.5"><i class="ph-bold ph-calendar-blank text-cyan-600"></i> Personalizar Rótulos, Datas e Módulos de cada Aula (<span id="class-meta-count-badge">12</span>)</span>
+                                <i class="ph-bold ph-caret-down transition-transform group-open:rotate-180"></i>
+                            </summary>
+                            <div class="p-2.5 max-h-48 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-2 border-t border-slate-200" id="class-metadata-editor-list">
+                            </div>
+                        </details>
+                    </div>
+
                     <!-- Notas -->
                     <div class="border border-slate-200 rounded-xl p-3.5 bg-white shadow-sm space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <div>
                                 <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Certificação</span>
                                 <h4 class="text-sm font-bold text-slate-800 mt-1">Listagem de Notas e Aprovados</h4>
-                                <p class="text-xs text-slate-500">Paginação automática (15 alunos por folha em A5 / 25 em A4).</p>
+                                <p class="text-xs text-slate-500">Paginação automática (15 alunos por folha em A5 / 24 em A4).</p>
                             </div>
                             <div class="flex gap-1.5">
                                 <label class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
@@ -631,9 +677,9 @@
                     <div class="border border-slate-200 rounded-xl p-3.5 bg-white shadow-sm space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <div>
-                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-blue-100 text-blue-800">Assiduidade</span>
-                                <h4 class="text-sm font-bold text-slate-800 mt-1">Frequência Geral (Aulas 01 a 12)</h4>
-                                <p class="text-xs text-slate-500">Use P (Presente) ou F (Falta) separados por vírgula.</p>
+                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-blue-100 text-blue-800">Assiduidade Dinâmica</span>
+                                <h4 class="text-sm font-bold text-slate-800 mt-1">Frequência Geral (<span id="att-section-count-label">12 Aulas</span>)</h4>
+                                <p class="text-xs text-slate-500">Clique nos botões <strong>P / F</strong> ou importe um CSV com qualquer número de aulas.</p>
                             </div>
                             <div class="flex gap-1.5">
                                 <label class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
@@ -645,15 +691,9 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="max-h-52 overflow-y-auto border border-slate-200 rounded-lg">
+                        <div class="max-h-64 overflow-x-auto overflow-y-auto border border-slate-200 rounded-lg">
                             <table class="w-full text-left text-xs">
-                                <thead class="bg-slate-100 text-slate-600 sticky top-0">
-                                    <tr>
-                                        <th class="p-2">Nome do Aluno</th>
-                                        <th class="p-2">12 Aulas (P,P,F...)</th>
-                                        <th class="p-2 w-8"></th>
-                                    </tr>
-                                </thead>
+                                <thead id="attendance-editor-thead" class="bg-slate-100 text-slate-600 sticky top-0 z-10"></thead>
                                 <tbody id="attendance-editor-tbody" class="divide-y divide-slate-100"></tbody>
                             </table>
                         </div>
@@ -663,9 +703,9 @@
                     <div class="border border-slate-200 rounded-xl p-3.5 bg-white shadow-sm space-y-3">
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <div>
-                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-fuchsia-100 text-fuchsia-800">Práticas</span>
-                                <h4 class="text-sm font-bold text-slate-800 mt-1">Participação em Atividades (Aulas 01 a 12)</h4>
-                                <p class="text-xs text-slate-500">Use S (Fez) ou N (Não fez) separados por vírgula.</p>
+                                <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-fuchsia-100 text-fuchsia-800">Práticas Dinâmicas</span>
+                                <h4 class="text-sm font-bold text-slate-800 mt-1">Participação em Atividades (<span id="act-section-count-label">12 Aulas</span>)</h4>
+                                <p class="text-xs text-slate-500">Clique para alternar entre <strong>S</strong> (Fez), <strong>N</strong> (Não fez) ou <strong>X</strong> (Sem atividade).</p>
                             </div>
                             <div class="flex gap-1.5">
                                 <label class="px-2.5 py-1.5 bg-fuchsia-600 hover:bg-fuchsia-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 cursor-pointer">
@@ -677,15 +717,9 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="max-h-52 overflow-y-auto border border-slate-200 rounded-lg">
+                        <div class="max-h-64 overflow-x-auto overflow-y-auto border border-slate-200 rounded-lg">
                             <table class="w-full text-left text-xs">
-                                <thead class="bg-slate-100 text-slate-600 sticky top-0">
-                                    <tr>
-                                        <th class="p-2">Nome do Aluno</th>
-                                        <th class="p-2">12 Atividades (S,S,N...)</th>
-                                        <th class="p-2 w-8"></th>
-                                    </tr>
-                                </thead>
+                                <thead id="activities-editor-thead" class="bg-slate-100 text-slate-600 sticky top-0 z-10"></thead>
                                 <tbody id="activities-editor-tbody" class="divide-y divide-slate-100"></tbody>
                             </table>
                         </div>
@@ -775,48 +809,8 @@
             <div class="p-5 space-y-2.5 max-h-[75vh] overflow-y-auto">
                 <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-4">
                     <div>
-                        <h4 class="text-xs font-bold text-slate-800">1. Modelo de Cronograma (.CSV)</h4>
-                        <p class="text-[11px] text-slate-500">Colunas: <code class="bg-slate-200 px-1 rounded">modulo;periodo;ministrantes;horario;titulo;cargaHoraria</code></p>
-                    </div>
-                    <button onclick="downloadCsvTemplate('cronograma')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shrink-0 flex items-center gap-1">
-                        <i class="ph-bold ph-download-simple"></i> Baixar
-                    </button>
-                </div>
-
-                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-4">
-                    <div>
-                        <h4 class="text-xs font-bold text-slate-800">2. Modelo de Planos de Aula (.CSV)</h4>
-                        <p class="text-[11px] text-slate-500">Colunas: <code class="bg-slate-200 px-1 rounded">aula;modulo;titulo;objetivos;conteudo;metodologia;avaliacao</code></p>
-                    </div>
-                    <button onclick="downloadCsvTemplate('planos')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shrink-0 flex items-center gap-1">
-                        <i class="ph-bold ph-download-simple"></i> Baixar
-                    </button>
-                </div>
-
-                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-4">
-                    <div>
-                        <h4 class="text-xs font-bold text-slate-800">3. Modelo de Relatórios de Aula (.CSV)</h4>
-                        <p class="text-[11px] text-slate-500">Colunas: <code class="bg-slate-200 px-1 rounded">aula;modulo;monitores;apoio;professor;supervisor;cargaHoraria;data;objetivo;alinhamento;planejamento;dificuldades;licoes;feedback;sugestoes</code></p>
-                    </div>
-                    <button onclick="downloadCsvTemplate('relatorios')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shrink-0 flex items-center gap-1">
-                        <i class="ph-bold ph-download-simple"></i> Baixar
-                    </button>
-                </div>
-
-                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-4">
-                    <div>
-                        <h4 class="text-xs font-bold text-slate-800">4. Modelo de Notas e Certificação (.CSV)</h4>
-                        <p class="text-[11px] text-slate-500">Colunas: <code class="bg-slate-200 px-1 rounded">nome;nascimento;nota1;nota2</code></p>
-                    </div>
-                    <button onclick="downloadCsvTemplate('notas')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shrink-0 flex items-center gap-1">
-                        <i class="ph-bold ph-download-simple"></i> Baixar
-                    </button>
-                </div>
-
-                <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-4">
-                    <div>
-                        <h4 class="text-xs font-bold text-slate-800">5. Modelo de Frequência Geral 12 Aulas (.CSV)</h4>
-                        <p class="text-[11px] text-slate-500">Colunas: <code class="bg-slate-200 px-1 rounded">nome;nascimento;a1;a2;a3;a4;a5;a6;a7;a8;a9;a10;a11;a12</code> (P ou F)</p>
+                        <h4 class="text-xs font-bold text-slate-800">5. Modelo de Frequência Geral Dinâmico (.CSV)</h4>
+                        <p class="text-[11px] text-slate-500">Gera automaticamente as colunas de aula conforme a quantidade configurada no projeto (P ou F)</p>
                     </div>
                     <button onclick="downloadCsvTemplate('frequencia')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold shrink-0 flex items-center gap-1">
                         <i class="ph-bold ph-download-simple"></i> Baixar
@@ -825,8 +819,8 @@
 
                 <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-between gap-4">
                     <div>
-                        <h4 class="text-xs font-bold text-slate-800">6. Modelo de Participação em Atividades (.CSV)</h4>
-                        <p class="text-[11px] text-slate-500">Colunas: <code class="bg-slate-200 px-1 rounded">nome;nascimento;a1;a2;a3;a4;a5;a6;a7;a8;a9;a10;a11;a12</code> (S ou N)</p>
+                        <h4 class="text-xs font-bold text-slate-800">6. Modelo de Participação em Atividades Dinâmico (.CSV)</h4>
+                        <p class="text-[11px] text-slate-500">Gera automaticamente as colunas de aula conforme a quantidade configurada no projeto (S, N ou X)</p>
                     </div>
                     <button onclick="downloadCsvTemplate('atividades')" class="px-3 py-1.5 bg-fuchsia-600 hover:bg-fuchsia-700 text-white rounded-lg text-xs font-semibold shrink-0 flex items-center gap-1">
                         <i class="ph-bold ph-download-simple"></i> Baixar
@@ -1150,6 +1144,20 @@
                     { nome: 'KAUE PINHEIRO DA SILVA AZEVEDO', nascimento: '11/07/2010', nota1: 6.5, nota2: 6.0 },
                     { nome: 'ENZO EDUARDO', nascimento: '12/05/2010', nota1: 5.5, nota2: 5.0 }
                 ],
+                classMetadata: [
+                    { aula: '01', date: '08/04', modulo: 'MÓDULO I' },
+                    { aula: '02', date: '15/04', modulo: 'MÓDULO I' },
+                    { aula: '03', date: '22/04', modulo: 'MÓDULO I' },
+                    { aula: '04', date: '29/04', modulo: 'MÓDULO II' },
+                    { aula: '05', date: '07/05', modulo: 'MÓDULO II' },
+                    { aula: '06', date: '13/05', modulo: 'MÓDULO II' },
+                    { aula: '07', date: '20/05', modulo: 'MÓDULO III' },
+                    { aula: '08', date: '27/05', modulo: 'MÓDULO III' },
+                    { aula: '09', date: '03/06', modulo: 'MÓDULO III' },
+                    { aula: '10', date: '10/06', modulo: 'MÓDULO IV' },
+                    { aula: '11', date: '17/06', modulo: 'MÓDULO IV' },
+                    { aula: '12', date: '24/06', modulo: 'MÓDULO IV' }
+                ],
                 attendance: [
                     { nome: 'ANGELO MAURICIO DA SILVA AGUIAR', nascimento: '24/05/2010', aulas: ['P','P','P','P','P','P','P','P','P','P','P','P'] },
                     { nome: 'DÁFNE MARIA PEREIRA DA PAZ', nascimento: '18/11/2010', aulas: ['P','P','P','P','P','F','P','P','P','P','P','P'] },
@@ -1226,6 +1234,57 @@
         /* ==========================================================================
            3. INICIALIZAÇÃO, ESTÉTICA E FORMATO (A5 / A4)
            ========================================================================== */
+        function ensureClassMetadataConsistency() {
+            if (!projectState.classMetadata || !Array.isArray(projectState.classMetadata) || projectState.classMetadata.length === 0) {
+                // Detecta automaticamente a quantidade real de aulas pelos registros de frequência/atividades ou planos/relatórios
+                let detectedCount = 0;
+                if (projectState.attendance && projectState.attendance.length > 0 && projectState.attendance[0].aulas) {
+                    detectedCount = projectState.attendance[0].aulas.length;
+                } else if (projectState.activities && projectState.activities.length > 0 && projectState.activities[0].aulas) {
+                    detectedCount = projectState.activities[0].aulas.length;
+                } else if (projectState.lessonPlans && projectState.lessonPlans.length > 0) {
+                    detectedCount = projectState.lessonPlans.length;
+                } else if (projectState.reports && projectState.reports.length > 0) {
+                    detectedCount = projectState.reports.length;
+                }
+                if (detectedCount <= 0) detectedCount = 12;
+
+                projectState.classMetadata = Array.from({ length: detectedCount }, (_, idx) => {
+                    const num = String(idx + 1).padStart(2, '0');
+                    const rep = (projectState.reports || [])[idx];
+                    const plan = (projectState.lessonPlans || [])[idx];
+                    const rawDate = rep && rep.data ? rep.data.split('/').slice(0, 2).join('/') : '';
+                    const mod = (plan && plan.modulo) || (rep && rep.modulo) || `MÓDULO ${Math.ceil((idx + 1) / Math.max(1, Math.ceil(detectedCount / 4)))}`;
+                    return {
+                        aula: num,
+                        date: rawDate,
+                        modulo: mod
+                    };
+                });
+            }
+
+            const targetCount = projectState.classMetadata.length;
+
+            // Ajusta todos os alunos de frequência para terem exatamente targetCount aulas
+            (projectState.attendance || []).forEach(student => {
+                if (!Array.isArray(student.aulas)) student.aulas = [];
+                while (student.aulas.length < targetCount) student.aulas.push('P');
+                if (student.aulas.length > targetCount) student.aulas = student.aulas.slice(0, targetCount);
+            });
+
+            // Ajusta todos os alunos de atividades para terem exatamente targetCount aulas
+            (projectState.activities || []).forEach(student => {
+                if (!Array.isArray(student.aulas)) student.aulas = [];
+                while (student.aulas.length < targetCount) student.aulas.push('S');
+                if (student.aulas.length > targetCount) student.aulas = student.aulas.slice(0, targetCount);
+            });
+        }
+
+        function getDynamicLessons() {
+            ensureClassMetadataConsistency();
+            return projectState.classMetadata;
+        }
+
         window.onload = function() {
             const saved = localStorage.getItem('ifpi_ebook_studio_v2');
             if (saved) {
@@ -1238,6 +1297,7 @@
             } else {
                 projectState = getLabMidiaProjectData();
             }
+            ensureClassMetadataConsistency();
             populateAllEditors();
             renderEbookPreview();
         };
@@ -1829,7 +1889,122 @@
             renderEbookPreview();
         }
 
+        /* --- Controle Dinâmico da Quantidade Real de Aulas --- */
+        function setTotalClassesCount(newCount) {
+            const count = Math.max(1, Math.min(40, parseInt(newCount, 10) || 1));
+            ensureClassMetadataConsistency();
+            const current = projectState.classMetadata;
+
+            if (count > current.length) {
+                for (let i = current.length; i < count; i++) {
+                    const num = String(i + 1).padStart(2, '0');
+                    const rep = (projectState.reports || [])[i];
+                    const plan = (projectState.lessonPlans || [])[i];
+                    const shortDate = rep && rep.data ? rep.data.split('/').slice(0, 2).join('/') : '';
+                    const mod = (plan && plan.modulo) || (rep && rep.modulo) || (current[current.length - 1]?.modulo || 'MÓDULO I');
+                    current.push({ aula: num, date: shortDate, modulo: mod });
+                }
+            } else if (count < current.length) {
+                projectState.classMetadata = current.slice(0, count);
+            }
+
+            ensureClassMetadataConsistency();
+            renderTablesEditors();
+            saveToStorage();
+            renderEbookPreview();
+            showToast(`Quantidade ajustada para ${count} ${count === 1 ? 'aula' : 'aulas'}!`);
+        }
+
+        function changeTotalClassesCount(delta) {
+            const currentCount = getDynamicLessons().length;
+            setTotalClassesCount(currentCount + delta);
+        }
+
+        function syncClassesFromPlansAndReports() {
+            const plans = projectState.lessonPlans || [];
+            const reports = projectState.reports || [];
+            const maxLen = Math.max(plans.length, reports.length);
+
+            if (maxLen === 0) {
+                showToast('Cadastre ao menos 1 Plano de Aula ou Relatório para sincronizar.');
+                return;
+            }
+
+            projectState.classMetadata = Array.from({ length: maxLen }, (_, i) => {
+                const p = plans[i];
+                const r = reports[i];
+                const num = (p && p.aula) || (r && r.aula) || String(i + 1).padStart(2, '0');
+                const dateStr = (r && r.data) ? r.data.split('/').slice(0, 2).join('/') : '';
+                const modStr = (p && p.modulo) || (r && r.modulo) || 'MÓDULO I';
+                return {
+                    aula: String(num).padStart(2, '0'),
+                    date: dateStr,
+                    modulo: modStr
+                };
+            });
+
+            ensureClassMetadataConsistency();
+            renderTablesEditors();
+            saveToStorage();
+            renderEbookPreview();
+            showToast(`Sincronizado com ${maxLen} ${maxLen === 1 ? 'aula cadastrada' : 'aulas cadastradas'}!`);
+        }
+
+        function updateClassMetadataField(idx, field, val) {
+            if (!projectState.classMetadata[idx]) return;
+            projectState.classMetadata[idx][field] = val;
+            renderTablesEditors();
+            saveToStorage();
+            renderEbookPreview();
+        }
+
+        function toggleAttendanceCell(studentIdx, classIdx) {
+            ensureClassMetadataConsistency();
+            const current = (projectState.attendance[studentIdx].aulas[classIdx] || 'P').toUpperCase();
+            projectState.attendance[studentIdx].aulas[classIdx] = current === 'P' ? 'F' : 'P';
+            renderTablesEditors();
+            saveToStorage();
+            renderEbookPreview();
+        }
+
+        function toggleActivityCell(studentIdx, classIdx) {
+            ensureClassMetadataConsistency();
+            const current = (projectState.activities[studentIdx].aulas[classIdx] || 'S').toUpperCase();
+            const nextMap = { 'S': 'N', 'N': 'X', 'X': 'S' };
+            projectState.activities[studentIdx].aulas[classIdx] = nextMap[current] || 'S';
+            renderTablesEditors();
+            saveToStorage();
+            renderEbookPreview();
+        }
+
         function renderTablesEditors() {
+            const lessons = getDynamicLessons();
+            const totalClasses = lessons.length;
+
+            // Atualiza controles de contagem de aulas
+            const countInput = document.getElementById('dynamic-class-count-input');
+            if (countInput) countInput.value = totalClasses;
+            const metaBadge = document.getElementById('class-meta-count-badge');
+            if (metaBadge) metaBadge.textContent = `${totalClasses} ${totalClasses === 1 ? 'aula' : 'aulas'}`;
+            const attLabel = document.getElementById('att-section-count-label');
+            if (attLabel) attLabel.textContent = `${totalClasses} ${totalClasses === 1 ? 'Aula' : 'Aulas'}`;
+            const actLabel = document.getElementById('act-section-count-label');
+            if (actLabel) actLabel.textContent = `${totalClasses} ${totalClasses === 1 ? 'Aula' : 'Aulas'}`;
+
+            // Renderiza editor de metadados das aulas (rótulo, data curta e módulo)
+            const metaListEl = document.getElementById('class-metadata-editor-list');
+            if (metaListEl) {
+                metaListEl.innerHTML = lessons.map((les, idx) => `
+                    <div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-lg border border-slate-200">
+                        <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-slate-800 text-white shrink-0">A${idx + 1}</span>
+                        <input type="text" value="${escapeHtml(les.aula)}" oninput="updateClassMetadataField(${idx}, 'aula', this.value)" class="w-10 px-1.5 py-1 text-[11px] border border-slate-300 rounded bg-white text-center font-bold" placeholder="Nº" title="Número ou Sigla da Aula">
+                        <input type="text" value="${escapeHtml(les.date)}" oninput="updateClassMetadataField(${idx}, 'date', this.value)" class="w-16 px-1.5 py-1 text-[11px] border border-slate-300 rounded bg-white text-center" placeholder="dd/mm" title="Data curta (ex: 08/04)">
+                        <input type="text" value="${escapeHtml(les.modulo)}" oninput="updateClassMetadataField(${idx}, 'modulo', this.value)" class="flex-1 min-w-0 px-1.5 py-1 text-[11px] border border-slate-300 rounded bg-white" placeholder="MÓDULO I" title="Módulo correspondente">
+                    </div>
+                `).join('');
+            }
+
+            // Notas
             document.getElementById('grades-editor-tbody').innerHTML = (projectState.grades || []).map((g, idx) => `
                 <tr>
                     <td class="p-1"><input type="text" value="${escapeHtml(g.nome)}" oninput="updateGradeRow(${idx}, 'nome', this.value)" class="w-full px-2 py-1 border border-slate-200 rounded text-xs"></td>
@@ -1840,21 +2015,78 @@
                 </tr>
             `).join('');
 
-            document.getElementById('attendance-editor-tbody').innerHTML = (projectState.attendance || []).map((a, idx) => `
-                <tr>
-                    <td class="p-1"><input type="text" value="${escapeHtml(a.nome)}" oninput="updateAttendanceRow(${idx}, 'nome', this.value)" class="w-full px-2 py-1 border border-slate-200 rounded text-xs"></td>
-                    <td class="p-1"><input type="text" value="${(a.aulas || []).join(',')}" oninput="updateAttendanceRow(${idx}, 'aulas', this.value)" class="w-full px-2 py-1 border border-slate-200 rounded text-xs font-mono uppercase"></td>
-                    <td class="p-1 text-center"><button onclick="removeAttendanceRow(${idx})" class="text-rose-500"><i class="ph-bold ph-trash"></i></button></td>
-                </tr>
-            `).join('');
+            // Cabeçalho e Corpo Interativo da Tabela de Frequência
+            const attThead = document.getElementById('attendance-editor-thead');
+            if (attThead) {
+                attThead.innerHTML = `
+                    <tr>
+                        <th class="p-1.5 min-w-[140px]">Nome do Aluno</th>
+                        <th class="p-1.5 w-20">Nasc.</th>
+                        ${lessons.map((l, i) => `<th class="p-1 text-center text-[10px] font-bold" title="${escapeHtml(l.modulo)} - Aula ${escapeHtml(l.aula)}">A${escapeHtml(l.aula)}<div class="text-[8px] font-normal text-slate-400">${escapeHtml(l.date)}</div></th>`).join('')}
+                        <th class="p-1 text-center text-[10px]">%</th>
+                        <th class="p-1 w-7"></th>
+                    </tr>
+                `;
+            }
 
-            document.getElementById('activities-editor-tbody').innerHTML = (projectState.activities || []).map((ac, idx) => `
-                <tr>
-                    <td class="p-1"><input type="text" value="${escapeHtml(ac.nome)}" oninput="updateActivityRow(${idx}, 'nome', this.value)" class="w-full px-2 py-1 border border-slate-200 rounded text-xs"></td>
-                    <td class="p-1"><input type="text" value="${(ac.aulas || []).join(',')}" oninput="updateActivityRow(${idx}, 'aulas', this.value)" class="w-full px-2 py-1 border border-slate-200 rounded text-xs font-mono uppercase"></td>
-                    <td class="p-1 text-center"><button onclick="removeActivityRow(${idx})" class="text-rose-500"><i class="ph-bold ph-trash"></i></button></td>
-                </tr>
-            `).join('');
+            document.getElementById('attendance-editor-tbody').innerHTML = (projectState.attendance || []).map((a, idx) => {
+                const arr = a.aulas || [];
+                const presCount = arr.filter(x => x.toUpperCase() === 'P').length;
+                const perc = totalClasses > 0 ? Math.round((presCount / totalClasses) * 100) : 0;
+                return `
+                    <tr>
+                        <td class="p-1"><input type="text" value="${escapeHtml(a.nome)}" oninput="updateAttendanceRow(${idx}, 'nome', this.value)" class="w-full px-2 py-1 border border-slate-200 rounded text-xs"></td>
+                        <td class="p-1"><input type="text" value="${escapeHtml(a.nascimento || '')}" oninput="updateAttendanceRow(${idx}, 'nascimento', this.value)" class="w-20 px-1.5 py-1 border border-slate-200 rounded text-[11px]"></td>
+                        ${lessons.map((_, cIdx) => {
+                            const val = (arr[cIdx] || 'P').toUpperCase();
+                            const isP = val === 'P';
+                            return `<td class="p-0.5 text-center">
+                                <button type="button" onclick="toggleAttendanceCell(${idx}, ${cIdx})" class="w-6 h-6 rounded text-[10px] font-extrabold transition ${isP ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200' : 'bg-rose-100 text-rose-700 hover:bg-rose-200'}">${val}</button>
+                            </td>`;
+                        }).join('')}
+                        <td class="p-1 text-center text-[10px] font-bold ${perc >= 75 ? 'text-emerald-700' : 'text-rose-600'}">${perc}%</td>
+                        <td class="p-1 text-center"><button onclick="removeAttendanceRow(${idx})" class="text-rose-500"><i class="ph-bold ph-trash"></i></button></td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Cabeçalho e Corpo Interativo da Tabela de Atividades
+            const actThead = document.getElementById('activities-editor-thead');
+            if (actThead) {
+                actThead.innerHTML = `
+                    <tr>
+                        <th class="p-1.5 min-w-[140px]">Nome do Aluno</th>
+                        <th class="p-1.5 w-20">Nasc.</th>
+                        ${lessons.map((l, i) => `<th class="p-1 text-center text-[10px] font-bold" title="${escapeHtml(l.modulo)} - Aula ${escapeHtml(l.aula)}">A${escapeHtml(l.aula)}<div class="text-[8px] font-normal text-slate-400">${escapeHtml(l.date)}</div></th>`).join('')}
+                        <th class="p-1 text-center text-[10px]">%</th>
+                        <th class="p-1 w-7"></th>
+                    </tr>
+                `;
+            }
+
+            document.getElementById('activities-editor-tbody').innerHTML = (projectState.activities || []).map((ac, idx) => {
+                const arr = ac.aulas || [];
+                const validClasses = arr.filter(x => x.toUpperCase() !== 'X').length || totalClasses;
+                const doneCount = arr.filter(x => x.toUpperCase() === 'S').length;
+                const perc = validClasses > 0 ? Math.round((doneCount / validClasses) * 100) : 0;
+                return `
+                    <tr>
+                        <td class="p-1"><input type="text" value="${escapeHtml(ac.nome)}" oninput="updateActivityRow(${idx}, 'nome', this.value)" class="w-full px-2 py-1 border border-slate-200 rounded text-xs"></td>
+                        <td class="p-1"><input type="text" value="${escapeHtml(ac.nascimento || '')}" oninput="updateActivityRow(${idx}, 'nascimento', this.value)" class="w-20 px-1.5 py-1 border border-slate-200 rounded text-[11px]"></td>
+                        ${lessons.map((_, cIdx) => {
+                            const val = (arr[cIdx] || 'S').toUpperCase();
+                            const btnStyle = val === 'S'
+                                ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200'
+                                : (val === 'N' ? 'bg-rose-100 text-rose-700 hover:bg-rose-200' : 'bg-slate-200 text-slate-600 hover:bg-slate-300');
+                            return `<td class="p-0.5 text-center">
+                                <button type="button" onclick="toggleActivityCell(${idx}, ${cIdx})" class="w-6 h-6 rounded text-[10px] font-extrabold transition ${btnStyle}">${val}</button>
+                            </td>`;
+                        }).join('')}
+                        <td class="p-1 text-center text-[10px] font-bold ${perc >= 75 ? 'text-emerald-700' : 'text-rose-600'}">${perc}%</td>
+                        <td class="p-1 text-center"><button onclick="removeActivityRow(${idx})" class="text-rose-500"><i class="ph-bold ph-trash"></i></button></td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function updateGradeRow(idx, field, val) { projectState.grades[idx][field] = val; saveToStorage(); renderEbookPreview(); }
@@ -1862,19 +2094,29 @@
         function removeGradeRow(idx) { projectState.grades.splice(idx, 1); renderTablesEditors(); saveToStorage(); renderEbookPreview(); }
 
         function updateAttendanceRow(idx, field, val) {
-            if (field === 'aulas') projectState.attendance[idx].aulas = val.split(',').map(s => s.trim().toUpperCase() || 'P').slice(0, 12);
+            const total = getDynamicLessons().length;
+            if (field === 'aulas') projectState.attendance[idx].aulas = val.split(',').map(s => s.trim().toUpperCase() || 'P').slice(0, total);
             else projectState.attendance[idx][field] = val;
             saveToStorage(); renderEbookPreview();
         }
-        function addAttendanceRow() { projectState.attendance.push({ nome: 'NOVO ALUNO', nascimento: '01/01/2010', aulas: ['P','P','P','P','P','P','P','P','P','P','P','P'] }); renderTablesEditors(); saveToStorage(); renderEbookPreview(); }
+        function addAttendanceRow() {
+            const total = getDynamicLessons().length;
+            projectState.attendance.push({ nome: 'NOVO ALUNO', nascimento: '01/01/2010', aulas: Array.from({ length: total }, () => 'P') });
+            renderTablesEditors(); saveToStorage(); renderEbookPreview();
+        }
         function removeAttendanceRow(idx) { projectState.attendance.splice(idx, 1); renderTablesEditors(); saveToStorage(); renderEbookPreview(); }
 
         function updateActivityRow(idx, field, val) {
-            if (field === 'aulas') projectState.activities[idx].aulas = val.split(',').map(s => s.trim().toUpperCase() || 'S').slice(0, 12);
+            const total = getDynamicLessons().length;
+            if (field === 'aulas') projectState.activities[idx].aulas = val.split(',').map(s => s.trim().toUpperCase() || 'S').slice(0, total);
             else projectState.activities[idx][field] = val;
             saveToStorage(); renderEbookPreview();
         }
-        function addActivityRow() { projectState.activities.push({ nome: 'NOVO ALUNO', nascimento: '01/01/2010', aulas: ['S','S','S','S','S','S','S','S','S','S','S','S'] }); renderTablesEditors(); saveToStorage(); renderEbookPreview(); }
+        function addActivityRow() {
+            const total = getDynamicLessons().length;
+            projectState.activities.push({ nome: 'NOVO ALUNO', nascimento: '01/01/2010', aulas: Array.from({ length: total }, () => 'S') });
+            renderTablesEditors(); saveToStorage(); renderEbookPreview();
+        }
         function removeActivityRow(idx) { projectState.activities.splice(idx, 1); renderTablesEditors(); saveToStorage(); renderEbookPreview(); }
 
         function renderAnnexesEditor() {
@@ -1974,8 +2216,26 @@
             const reader = new FileReader();
             reader.onload = e => {
                 const rows = parseCsvText(e.target.result); if (rows.length < 2) return;
-                projectState.attendance = rows.slice(1).map(r => ({ nome: r[0]||'', nascimento: r[1]||'', aulas: r.slice(2, 14).map(x => (x||'P').toUpperCase()) }));
-                renderTablesEditors(); saveToStorage(); renderEbookPreview(); showToast('Frequência CSV importada!');
+                const headerCols = rows[0].slice(2).filter(h => h !== '');
+                const detectedClassesCount = Math.max(1, headerCols.length || (rows[1].length - 2));
+
+                // Ajusta a quantidade de aulas do projeto automaticamente conforme as colunas do CSV importado
+                setTotalClassesCount(detectedClassesCount);
+                headerCols.forEach((h, idx) => {
+                    if (projectState.classMetadata[idx]) {
+                        const dateMatch = h.match(/(\d{2}\/\d{2})/);
+                        if (dateMatch) projectState.classMetadata[idx].date = dateMatch[1];
+                    }
+                });
+
+                projectState.attendance = rows.slice(1).map(r => ({
+                    nome: r[0] || '',
+                    nascimento: r[1] || '',
+                    aulas: Array.from({ length: detectedClassesCount }, (_, k) => (r[k + 2] || 'P').trim().toUpperCase())
+                }));
+                ensureClassMetadataConsistency();
+                renderTablesEditors(); saveToStorage(); renderEbookPreview();
+                showToast(`Frequência CSV importada (${detectedClassesCount} aulas detectadas)!`);
             };
             reader.readAsText(file, 'UTF-8');
         }
@@ -1985,8 +2245,26 @@
             const reader = new FileReader();
             reader.onload = e => {
                 const rows = parseCsvText(e.target.result); if (rows.length < 2) return;
-                projectState.activities = rows.slice(1).map(r => ({ nome: r[0]||'', nascimento: r[1]||'', aulas: r.slice(2, 14).map(x => (x||'S').toUpperCase()) }));
-                renderTablesEditors(); saveToStorage(); renderEbookPreview(); showToast('Atividades CSV importadas!');
+                const headerCols = rows[0].slice(2).filter(h => h !== '');
+                const detectedClassesCount = Math.max(1, headerCols.length || (rows[1].length - 2));
+
+                // Ajusta a quantidade de aulas do projeto automaticamente conforme as colunas do CSV importado
+                setTotalClassesCount(detectedClassesCount);
+                headerCols.forEach((h, idx) => {
+                    if (projectState.classMetadata[idx]) {
+                        const dateMatch = h.match(/(\d{2}\/\d{2})/);
+                        if (dateMatch) projectState.classMetadata[idx].date = dateMatch[1];
+                    }
+                });
+
+                projectState.activities = rows.slice(1).map(r => ({
+                    nome: r[0] || '',
+                    nascimento: r[1] || '',
+                    aulas: Array.from({ length: detectedClassesCount }, (_, k) => (r[k + 2] || 'S').trim().toUpperCase())
+                }));
+                ensureClassMetadataConsistency();
+                renderTablesEditors(); saveToStorage(); renderEbookPreview();
+                showToast(`Atividades CSV importadas (${detectedClassesCount} aulas detectadas)!`);
             };
             reader.readAsText(file, 'UTF-8');
         }
@@ -1996,12 +2274,20 @@
 
         function downloadCsvTemplate(type) {
             let content = '';
+            const lessons = getDynamicLessons();
             if (type === 'cronograma') content = 'modulo;periodo;ministrantes;horario;titulo;cargaHoraria\nMÓDULO 1;08/04 a 22/04;Maria Aparecida e Vanderlea;13:20;Fundamentos do Design Visual;6h';
             else if (type === 'planos') content = 'aula;modulo;titulo;objetivos;conteudo;metodologia;avaliacao\n01;MÓDULO I;Introdução ao Design;Compreender contraste e alinhamento;Princípios visuais;Aula prática com slides;Participação na oficina';
             else if (type === 'relatorios') content = 'aula;modulo;monitores;apoio;professor;supervisor;cargaHoraria;data;objetivo;alinhamento;planejamento;dificuldades;licoes;feedback;sugestoes\n01;MÓDULO I;Maria Aparecida;Vanderlea;Leonia Costa;Eltoni Guimarães;2 horas;08/04/2026;Apresentar o LabMídia;Alinhado à docência;Acolhida e prática;Controle do tempo;Dinâmica visual;Ótima recepção;Mais tempo de laboratório';
             else if (type === 'notas') content = 'nome;nascimento;nota1;nota2\nANGELO MAURICIO DA SILVA AGUIAR;24/05/2010;9.5;10.0\nDÁFNE MARIA PEREIRA DA PAZ;18/11/2010;9.0;10.0';
-            else if (type === 'frequencia') content = 'nome;nascimento;a1;a2;a3;a4;a5;a6;a7;a8;a9;a10;a11;a12\nANGELO MAURICIO DA SILVA AGUIAR;24/05/2010;P;P;P;P;P;P;P;P;P;P;P;P';
-            else if (type === 'atividades') content = 'nome;nascimento;a1;a2;a3;a4;a5;a6;a7;a8;a9;a10;a11;a12\nANGELO MAURICIO DA SILVA AGUIAR;24/05/2010;S;S;S;S;S;S;S;S;S;S;S;S';
+            else if (type === 'frequencia') {
+                const headers = lessons.map(l => `Aula_${l.aula}${l.date ? '_' + l.date : ''}`).join(';');
+                const sampleP = lessons.map(() => 'P').join(';');
+                content = `nome;nascimento;${headers}\nANGELO MAURICIO DA SILVA AGUIAR;24/05/2010;${sampleP}`;
+            } else if (type === 'atividades') {
+                const headers = lessons.map(l => `Aula_${l.aula}${l.date ? '_' + l.date : ''}`).join(';');
+                const sampleS = lessons.map(() => 'S').join(';');
+                content = `nome;nascimento;${headers}\nANGELO MAURICIO DA SILVA AGUIAR;24/05/2010;${sampleS}`;
+            }
 
             const blob = new Blob(["\uFEFF" + content], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
@@ -2052,6 +2338,12 @@
                     projectLogo: projectState.meta.projectLogo,
                     instLogo: DEFAULT_INST_LOGO
                 },
+                classMetadata: [
+                    { aula: '01', date: '08/04', modulo: 'MÓDULO I' },
+                    { aula: '02', date: '15/04', modulo: 'MÓDULO I' },
+                    { aula: '03', date: '22/04', modulo: 'MÓDULO II' },
+                    { aula: '04', date: '29/04', modulo: 'MÓDULO II' }
+                ],
                 team: [], introPhotos: [], sections: {}, schedule: [], lessonPlans: [], reports: [], grades: [], attendance: [], activities: [], annexes: []
             };
             populateAllEditors(); saveToStorage(); renderEbookPreview();
@@ -2738,141 +3030,95 @@
                     </div>
                 `;
             }
-
-            // 9. RELATÓRIO DE AULA
-            if (pageObj.type === 'report') {
-                return `
-                    <div class="ebook-page ${sizeClass}" id="ebook-page-${pageNum}">
-                        ${buildPageHeader(`RELATÓRIO DE AULA ${pageObj.aula}`, pageObj.modulo, isA5)}
-                        <div class="flex-1 ${bodyPad} overflow-hidden">
-                            ${pageObj.metaHeader ? `
-                                <div class="bg-slate-50 border-l-4 ${isA5 ? 'p-2 mb-2 text-[7.2pt]' : 'p-3 mb-3.5 text-[9pt]'} rounded-r-xl leading-snug text-slate-700 font-medium space-y-0.5" style="border-color: var(--c2);">
-                                    ${pageObj.metaHeader.split('\n').map(l => `<div>${escapeHtml(l)}</div>`).join('')}
-                                </div>
-                            ` : ''}
-                            ${formatParagraphsHtml(pageObj.content, isA5)}
-                        </div>
-                        ${buildPageFooter(pageNum, isA5)}
-                    </div>
-                `;
-            }
-
-            // 10. FOTOS DE AULA
-            if (pageObj.type === 'reportPhotos') {
-                const photos = pageObj.photos || [];
-                return `
-                    <div class="ebook-page ${sizeClass}" id="ebook-page-${pageNum}">
-                        ${buildPageHeader(`FOTOS DE AULA ${pageObj.aula}`, pageObj.modulo, isA5)}
-                        <div class="flex-1 ${bodyPad} flex flex-col justify-center overflow-hidden">
-                            <div class="grid grid-cols-2 ${isA5 ? 'gap-2.5 h-[135mm]' : 'gap-4 h-[195mm]'}">
-                                ${photos.map((src, i) => `
-                                    <div class="${photos.length === 3 && i === 0 ? 'col-span-2' : ''} rounded-xl overflow-hidden border border-slate-200 shadow-sm bg-slate-100">
-                                        <img src="${src}" class="w-full h-full object-cover">
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        ${buildPageFooter(pageNum, isA5)}
-                    </div>
-                `;
-            }
-
-            // 11. TABELA DE APROVADOS / NOTAS (PAGINADA PARA A5 E A4)
-            if (pageObj.type === 'gradesTable') {
-                return `
-                    <div class="ebook-page ${sizeClass}" id="ebook-page-${pageNum}">
-                        ${buildPageHeader('APROVADOS', 'RESULTADO FINAL E CERTIFICAÇÃO', isA5)}
-                        <div class="flex-1 ${widePad} overflow-hidden">
-                            <div class="border border-slate-300 rounded-xl overflow-hidden shadow-sm">
-                                <div class="text-white text-center py-1 ebook-title-font font-bold ${isA5 ? 'text-[7pt]' : 'text-[9pt]'} uppercase tracking-wider" style="background: linear-gradient(90deg, var(--c1), var(--c2));">
-                                    LISTAGEM DE NOTAS DE CERTIFICAÇÃO • ${escapeHtml(m.activity)}
-                                </div>
-                                <table class="w-full border-collapse ${isA5 ? 'text-[6.6pt]' : 'text-[8.5pt]'}">
-                                    <thead>
-                                        <tr class="bg-slate-800 text-white">
-                                            <th class="p-1 border border-slate-600 text-center w-6">Nº</th>
-                                            <th class="p-1 border border-slate-600 text-left">Nome do Aluno</th>
-                                            <th class="p-1 border border-slate-600 text-center">Nasc.</th>
-                                            <th class="p-1 border border-slate-600 text-center">N1</th>
-                                            <th class="p-1 border border-slate-600 text-center">N2</th>
-                                            <th class="p-1 border border-slate-600 text-center">Soma</th>
-                                            <th class="p-1 border border-slate-600 text-center">Média</th>
-                                            <th class="p-1 border border-slate-600 text-center">Situação</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        ${pageObj.rows.map((g, i) => {
-                                            const n1 = Number(g.nota1) || 0;
-                                            const n2 = Number(g.nota2) || 0;
-                                            const soma = (n1 + n2).toFixed(1);
-                                            const media = ((n1 + n2) / 2).toFixed(1);
-                                            const aprovado = ((n1 + n2) / 2) >= 7.0;
-                                            return `
-                                                <tr class="${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}">
-                                                    <td class="p-1 border border-slate-200 text-center font-bold">${pageObj.startIndex + i + 1}</td>
-                                                    <td class="p-1 border border-slate-200 font-semibold uppercase truncate max-w-[130px]">${escapeHtml(g.nome)}</td>
-                                                    <td class="p-1 border border-slate-200 text-center">${escapeHtml(g.nascimento)}</td>
-                                                    <td class="p-1 border border-slate-200 text-center">${n1.toFixed(1).replace('.', ',')}</td>
-                                                    <td class="p-1 border border-slate-200 text-center">${n2.toFixed(1).replace('.', ',')}</td>
-                                                    <td class="p-1 border border-slate-200 text-center font-semibold">${soma.replace('.', ',')}</td>
-                                                    <td class="p-1 border border-slate-200 text-center font-bold">${media.replace('.', ',')}</td>
-                                                    <td class="p-1 border border-slate-200 text-center font-bold ${aprovado ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'}">
-                                                        ${aprovado ? '✔ APROVADO' : '✘ REPROVADO'}
-                                                    </td>
-                                                </tr>
-                                            `;
-                                        }).join('')}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        ${buildPageFooter(pageNum, isA5)}
-                    </div>
-                `;
-            }
-
-            // 12. TABELA DE FREQUÊNCIA GERAL
+            // 12. TABELA DE FREQUÊNCIA GERAL (100% DINÂMICA CONFORME A QUANTIDADE REAL DE AULAS)
             if (pageObj.type === 'attendanceTable') {
+                const lessons = getDynamicLessons();
+                const totalClasses = lessons.length;
+
+                // Agrupa aulas consecutivas do mesmo Módulo para montar o cabeçalho superior igual ao PDF original
+                const moduleGroups = [];
+                lessons.forEach(les => {
+                    const modName = (les.modulo || 'MÓDULO').trim();
+                    const lastGrp = moduleGroups[moduleGroups.length - 1];
+                    if (lastGrp && lastGrp.modulo === modName) {
+                        lastGrp.span += 1;
+                    } else {
+                        moduleGroups.push({ modulo: modName, span: 1 });
+                    }
+                });
+
+                // Escala tipográfica inteligente conforme o número real de aulas e o formato (A5 ou A4)
+                const tableFontClass = isA5
+                    ? (totalClasses <= 6 ? 'text-[6.8pt]' : (totalClasses <= 10 ? 'text-[6.1pt]' : 'text-[5.3pt]'))
+                    : (totalClasses <= 6 ? 'text-[8.8pt]' : (totalClasses <= 10 ? 'text-[8.0pt]' : 'text-[7.2pt]'));
+                const cellPad = isA5
+                    ? (totalClasses <= 8 ? 'p-1' : 'p-0.5')
+                    : (totalClasses <= 8 ? 'p-1.5' : 'p-1');
+
                 return `
                     <div class="ebook-page ${sizeClass}" id="ebook-page-${pageNum}">
                         ${buildPageHeader('FREQUÊNCIA GERAL', m.activity, isA5)}
-                        <div class="flex-1 ${widePad} overflow-hidden">
+                        <div class="flex-1 ${widePad} overflow-hidden flex flex-col justify-between">
                             <div class="border border-slate-300 rounded-xl overflow-hidden shadow-sm">
-                                <div class="text-white text-center py-1 ebook-title-font font-bold ${isA5 ? 'text-[6.8pt]' : 'text-[8.8pt]'} uppercase" style="background: linear-gradient(90deg, var(--c2), var(--c3));">
-                                    REGISTRO DE FREQUÊNCIA NAS AULAS (01 A 12)
+                                <div class="text-white text-center py-1 ebook-title-font font-bold ${isA5 ? 'text-[6.6pt]' : 'text-[8.8pt]'} uppercase tracking-wider" style="background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));">
+                                    LISTAGEM DE FREQUÊNCIA - Projeto ${escapeHtml(m.titlePrefix + m.titleGradient)} (${totalClasses} ${totalClasses === 1 ? 'Aula Registrada' : 'Aulas Registradas'})
                                 </div>
-                                <table class="w-full border-collapse ${isA5 ? 'text-[5.8pt]' : 'text-[7.8pt]'}">
+                                <table class="w-full border-collapse ${tableFontClass}">
                                     <thead>
+                                        <!-- Linha 1: Agrupamento Dinâmico por Módulos -->
+                                        <tr class="bg-slate-900 text-white">
+                                            <th colspan="3" class="${cellPad} border border-slate-700 text-left font-bold">${escapeHtml(m.course)} - IFPI</th>
+                                            ${moduleGroups.map(grp => `<th colspan="${grp.span}" class="${cellPad} border border-slate-700 text-center font-extrabold uppercase text-cyan-300">${escapeHtml(grp.modulo)}</th>`).join('')}
+                                            <th colspan="5" class="${cellPad} border border-slate-700 text-center font-bold uppercase">Resumo Final</th>
+                                        </tr>
+                                        <!-- Linha 2: Colunas Reais de Aula + Datas -->
                                         <tr class="bg-slate-800 text-white">
-                                            <th class="p-0.5 border border-slate-600 text-center">Nº</th>
-                                            <th class="p-0.5 border border-slate-600 text-left">Nome do Aluno</th>
-                                            ${Array.from({length: 12}, (_, k) => `<th class="p-0.5 border border-slate-600 text-center">A${k+1}</th>`).join('')}
-                                            <th class="p-0.5 border border-slate-600 text-center">P</th>
-                                            <th class="p-0.5 border border-slate-600 text-center">%</th>
-                                            <th class="p-0.5 border border-slate-600 text-center">Status</th>
+                                            <th class="${cellPad} border border-slate-600 text-center w-5">Nº</th>
+                                            <th class="${cellPad} border border-slate-600 text-left">Nome do Aluno</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">Nasc.</th>
+                                            ${lessons.map(l => `
+                                                <th class="${cellPad} border border-slate-600 text-center leading-tight">
+                                                    <div>A${escapeHtml(l.aula)}</div>
+                                                    ${l.date ? `<div class="text-[4.8pt] font-normal text-slate-300">${escapeHtml(l.date)}</div>` : ''}
+                                                </th>
+                                            `).join('')}
+                                            <th class="${cellPad} border border-slate-600 text-center" title="Total de Presenças">Pres.</th>
+                                            <th class="${cellPad} border border-slate-600 text-center" title="Total de Faltas">Faltas</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">% P</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">% F</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">Situação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         ${pageObj.rows.map((a, i) => {
-                                            const arr = Array.from({length: 12}, (_, k) => ((a.aulas || [])[k] || 'P').toUpperCase());
+                                            const arr = Array.from({ length: totalClasses }, (_, k) => ((a.aulas || [])[k] || 'P').toUpperCase());
                                             const pres = arr.filter(x => x === 'P').length;
-                                            const perc = Math.round((pres / 12) * 100);
-                                            const aprov = (pres / 12) >= 0.75;
+                                            const faltas = totalClasses - pres;
+                                            const percP = totalClasses > 0 ? ((pres / totalClasses) * 100).toFixed(1).replace('.', ',') : '0,0';
+                                            const percF = totalClasses > 0 ? ((faltas / totalClasses) * 100).toFixed(1).replace('.', ',') : '0,0';
+                                            const aprov = totalClasses > 0 ? (pres / totalClasses) >= 0.75 : true;
                                             return `
                                                 <tr class="${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}">
-                                                    <td class="p-0.5 border border-slate-200 text-center font-bold">${pageObj.startIndex + i + 1}</td>
-                                                    <td class="p-0.5 border border-slate-200 font-semibold uppercase truncate ${isA5 ? 'max-w-[95px]' : 'max-w-[140px]'}">${escapeHtml(a.nome)}</td>
-                                                    ${arr.map(st => `<td class="p-0.5 border border-slate-200 text-center font-bold ${st === 'P' ? 'text-emerald-700' : 'text-rose-600'}">${st}</td>`).join('')}
-                                                    <td class="p-0.5 border border-slate-200 text-center font-bold">${pres}</td>
-                                                    <td class="p-0.5 border border-slate-200 text-center">${perc}%</td>
-                                                    <td class="p-0.5 border border-slate-200 text-center font-bold ${aprov ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'}">
-                                                        ${aprov ? '✔ APR' : '✘ REP'}
+                                                    <td class="${cellPad} border border-slate-200 text-center font-bold">${pageObj.startIndex + i + 1}</td>
+                                                    <td class="${cellPad} border border-slate-200 font-semibold uppercase truncate ${isA5 ? 'max-w-[78px]' : 'max-w-[130px]'}">${escapeHtml(a.nome)}</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center text-slate-500">${escapeHtml(a.nascimento || '-')}</td>
+                                                    ${arr.map(st => `<td class="${cellPad} border border-slate-200 text-center font-bold ${st === 'P' ? 'text-emerald-700' : 'text-rose-600'}">${st}</td>`).join('')}
+                                                    <td class="${cellPad} border border-slate-200 text-center font-bold text-emerald-800">${pres}</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center font-semibold text-rose-700">${faltas}</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center font-semibold">${percP}%</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center text-slate-500">${percF}%</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center font-bold ${aprov ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'}">
+                                                        ${aprov ? '✔ APROVADO' : '✘ REPROVADO'}
                                                     </td>
                                                 </tr>
                                             `;
                                         }).join('')}
                                     </tbody>
                                 </table>
+                                <div class="bg-slate-100 px-3 py-1 text-[6pt] font-semibold text-slate-600 flex items-center justify-between border-t border-slate-200">
+                                    <span>LEGENDA: <strong>P</strong> = Presente | <strong>F</strong> = Falta | Total de aulas consideradas: <strong>${totalClasses}</strong></span>
+                                    <span>Critério de Aprovação: <strong>≥ 75% de presença</strong> nas aulas registradas</span>
+                                </div>
                             </div>
                         </div>
                         ${buildPageFooter(pageNum, isA5)}
@@ -2880,48 +3126,94 @@
                 `;
             }
 
-            // 13. TABELA DE PARTICIPAÇÃO EM ATIVIDADES
+            // 13. TABELA DE PARTICIPAÇÃO EM ATIVIDADES (100% DINÂMICA CONFORME A QUANTIDADE REAL DE AULAS)
             if (pageObj.type === 'activitiesTable') {
+                const lessons = getDynamicLessons();
+                const totalClasses = lessons.length;
+
+                const moduleGroups = [];
+                lessons.forEach(les => {
+                    const modName = (les.modulo || 'MÓDULO').trim();
+                    const lastGrp = moduleGroups[moduleGroups.length - 1];
+                    if (lastGrp && lastGrp.modulo === modName) {
+                        lastGrp.span += 1;
+                    } else {
+                        moduleGroups.push({ modulo: modName, span: 1 });
+                    }
+                });
+
+                const tableFontClass = isA5
+                    ? (totalClasses <= 6 ? 'text-[6.8pt]' : (totalClasses <= 10 ? 'text-[6.1pt]' : 'text-[5.3pt]'))
+                    : (totalClasses <= 6 ? 'text-[8.8pt]' : (totalClasses <= 10 ? 'text-[8.0pt]' : 'text-[7.2pt]'));
+                const cellPad = isA5
+                    ? (totalClasses <= 8 ? 'p-1' : 'p-0.5')
+                    : (totalClasses <= 8 ? 'p-1.5' : 'p-1');
+
                 return `
                     <div class="ebook-page ${sizeClass}" id="ebook-page-${pageNum}">
                         ${buildPageHeader('ATIVIDADES GERAL', m.activity, isA5)}
-                        <div class="flex-1 ${widePad} overflow-hidden">
+                        <div class="flex-1 ${widePad} overflow-hidden flex flex-col justify-between">
                             <div class="border border-slate-300 rounded-xl overflow-hidden shadow-sm">
-                                <div class="text-white text-center py-1 ebook-title-font font-bold ${isA5 ? 'text-[6.8pt]' : 'text-[8.8pt]'} uppercase" style="background: linear-gradient(90deg, var(--c3), var(--c4));">
-                                    PARTICIPAÇÃO EM ATIVIDADES PRÁTICAS (01 A 12)
+                                <div class="text-white text-center py-1 ebook-title-font font-bold ${isA5 ? 'text-[6.6pt]' : 'text-[8.8pt]'} uppercase tracking-wider" style="background: linear-gradient(90deg, var(--c3), var(--c4));">
+                                    LISTAGEM DE PARTICIPAÇÃO EM ATIVIDADES (${totalClasses} ${totalClasses === 1 ? 'Aula Registrada' : 'Aulas Registradas'})
                                 </div>
-                                <table class="w-full border-collapse ${isA5 ? 'text-[5.8pt]' : 'text-[7.8pt]'}">
+                                <table class="w-full border-collapse ${tableFontClass}">
                                     <thead>
+                                        <!-- Linha 1: Agrupamento Dinâmico por Módulos -->
+                                        <tr class="bg-slate-900 text-white">
+                                            <th colspan="3" class="${cellPad} border border-slate-700 text-left font-bold">${escapeHtml(m.course)} - IFPI</th>
+                                            ${moduleGroups.map(grp => `<th colspan="${grp.span}" class="${cellPad} border border-slate-700 text-center font-extrabold uppercase text-amber-300">${escapeHtml(grp.modulo)}</th>`).join('')}
+                                            <th colspan="5" class="${cellPad} border border-slate-700 text-center font-bold uppercase">Resumo de Atividades</th>
+                                        </tr>
+                                        <!-- Linha 2: Colunas Reais de Aula + Datas -->
                                         <tr class="bg-slate-800 text-white">
-                                            <th class="p-0.5 border border-slate-600 text-center">Nº</th>
-                                            <th class="p-0.5 border border-slate-600 text-left">Nome do Aluno</th>
-                                            ${Array.from({length: 12}, (_, k) => `<th class="p-0.5 border border-slate-600 text-center">A${k+1}</th>`).join('')}
-                                            <th class="p-0.5 border border-slate-600 text-center">Sim</th>
-                                            <th class="p-0.5 border border-slate-600 text-center">%</th>
-                                            <th class="p-0.5 border border-slate-600 text-center">Status</th>
+                                            <th class="${cellPad} border border-slate-600 text-center w-5">Nº</th>
+                                            <th class="${cellPad} border border-slate-600 text-left">Nome do Aluno</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">Nasc.</th>
+                                            ${lessons.map(l => `
+                                                <th class="${cellPad} border border-slate-600 text-center leading-tight">
+                                                    <div>A${escapeHtml(l.aula)}</div>
+                                                    ${l.date ? `<div class="text-[4.8pt] font-normal text-slate-300">${escapeHtml(l.date)}</div>` : ''}
+                                                </th>
+                                            `).join('')}
+                                            <th class="${cellPad} border border-slate-600 text-center" title="Participaram (Sim)">Sim</th>
+                                            <th class="${cellPad} border border-slate-600 text-center" title="Não Participaram">Não</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">% Sim</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">% Não</th>
+                                            <th class="${cellPad} border border-slate-600 text-center">Situação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         ${pageObj.rows.map((ac, i) => {
-                                            const arr = Array.from({length: 12}, (_, k) => ((ac.aulas || [])[k] || 'S').toUpperCase());
+                                            const arr = Array.from({ length: totalClasses }, (_, k) => ((ac.aulas || [])[k] || 'S').toUpperCase());
+                                            const validTotal = arr.filter(x => x !== 'X').length || totalClasses;
                                             const fez = arr.filter(x => x === 'S').length;
-                                            const perc = Math.round((fez / 12) * 100);
-                                            const aprov = (fez / 12) >= 0.75;
+                                            const naoFez = arr.filter(x => x === 'N').length;
+                                            const percS = validTotal > 0 ? ((fez / validTotal) * 100).toFixed(1).replace('.', ',') : '0,0';
+                                            const percN = validTotal > 0 ? ((naoFez / validTotal) * 100).toFixed(1).replace('.', ',') : '0,0';
+                                            const aprov = validTotal > 0 ? (fez / validTotal) >= 0.75 : true;
                                             return `
                                                 <tr class="${i % 2 === 0 ? 'bg-slate-50' : 'bg-white'}">
-                                                    <td class="p-0.5 border border-slate-200 text-center font-bold">${pageObj.startIndex + i + 1}</td>
-                                                    <td class="p-0.5 border border-slate-200 font-semibold uppercase truncate ${isA5 ? 'max-w-[95px]' : 'max-w-[140px]'}">${escapeHtml(ac.nome)}</td>
-                                                    ${arr.map(st => `<td class="p-0.5 border border-slate-200 text-center font-bold ${st === 'S' ? 'text-emerald-700' : 'text-rose-600'}">${st}</td>`).join('')}
-                                                    <td class="p-0.5 border border-slate-200 text-center font-bold">${fez}</td>
-                                                    <td class="p-0.5 border border-slate-200 text-center">${perc}%</td>
-                                                    <td class="p-0.5 border border-slate-200 text-center font-bold ${aprov ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'}">
-                                                        ${aprov ? '✔ APR' : '✘ REP'}
+                                                    <td class="${cellPad} border border-slate-200 text-center font-bold">${pageObj.startIndex + i + 1}</td>
+                                                    <td class="${cellPad} border border-slate-200 font-semibold uppercase truncate ${isA5 ? 'max-w-[78px]' : 'max-w-[130px]'}">${escapeHtml(ac.nome)}</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center text-slate-500">${escapeHtml(ac.nascimento || '-')}</td>
+                                                    ${arr.map(st => `<td class="${cellPad} border border-slate-200 text-center font-bold ${st === 'S' ? 'text-emerald-700' : (st === 'N' ? 'text-rose-600' : 'text-slate-400')}">${st}</td>`).join('')}
+                                                    <td class="${cellPad} border border-slate-200 text-center font-bold text-emerald-800">${fez}</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center font-semibold text-rose-700">${naoFez}</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center font-semibold">${percS}%</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center text-slate-500">${percN}%</td>
+                                                    <td class="${cellPad} border border-slate-200 text-center font-bold ${aprov ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'}">
+                                                        ${aprov ? '✔ APROVADO' : '✘ REPROVADO'}
                                                     </td>
                                                 </tr>
                                             `;
                                         }).join('')}
                                     </tbody>
                                 </table>
+                                <div class="bg-slate-100 px-3 py-1 text-[6pt] font-semibold text-slate-600 flex items-center justify-between border-t border-slate-200">
+                                    <span>LEGENDA: <strong>S</strong> = Fez Atividade | <strong>N</strong> = Não Fez | <strong>X</strong> = Sem Atividade | Total de aulas: <strong>${totalClasses}</strong></span>
+                                    <span>Critério de Aprovação: <strong>≥ 75% de participação</strong> nas aulas com atividades</span>
+                                </div>
                             </div>
                         </div>
                         ${buildPageFooter(pageNum, isA5)}
